@@ -3,10 +3,10 @@
  */
 window.HYPO_CONFIG = {
   brand: "HypoPlán",
-  advisorName: "Váš hypoteční specialista",
-  phone: "+420 000 000 000",
+  advisorName: "Ing. Martin Šváb – Majetkový a finanční konzultant",
+  phone: "+420 777 55 25 30",
   // E-mail, na který se poptávka připraví k odeslání (otevře se e-mailový klient návštěvníka).
-  email: "",
+  email: "martinsvab27@gmail.com",
   // Volitelně: URL formulářové služby (např. Formspree), poptávka se pak odešle přímo z webu.
   formEndpoint: ""
 };
