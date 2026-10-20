@@ -386,6 +386,7 @@
       zprava: $("#l-msg").value.trim(),
       vypocet: state.summary
     };
+    if (CONFIG.formAccessKey) Object.assign(data, { access_key: CONFIG.formAccessKey, subject: "Poptávka hypotéky – " + data.jmeno, from_name: CONFIG.brand || "Web" });
 
     try {
       if (CONFIG.formEndpoint) {
