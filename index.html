@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hypoteční kalkulačka – orientační splátka hypotéky</title>
+  <meta name="description" content="Spočítejte si orientační měsíční splátku hypotéky – nový úvěr i refinancování podle aktuálních sazeb bank. Zdarma a nezávazně." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f766e'/%3E%3Cpath d='M8 17l8-7 8 7v7h-5v-5h-6v5H8z' fill='white'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav__inner">
+      <a href="#" class="logo" aria-label="Domů">
+        <span class="logo__mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><path d="M8 17l8-7 8 7v7h-5v-5h-6v5H8z" fill="currentColor"/></svg>
+        </span>
+        <span data-brand>HypoPlán</span>
+      </a>
+      <nav class="nav__links" aria-label="Hlavní navigace">
+        <a href="#kalkulacka">Kalkulačka</a>
+        <a href="#sazby">Sazby</a>
+        <a href="#jak-to-funguje">Jak to funguje</a>
+        <a href="#kontakt" class="btn btn--small">Nezávazná konzultace</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero__inner">
+        <div class="hero__text">
+          <p class="eyebrow">Hypoteční kalkulačka</p>
+          <h1>Kolik budete měsíčně splácet za&nbsp;hypotéku?</h1>
+          <p class="lead">Zadejte pár údajů a hned uvidíte orientační splátku podle aktuálních sazeb bank. Nový úvěr i&nbsp;refinancování&nbsp;– zdarma, bez registrace.</p>
+          <div class="hero__cta">
+            <a href="#kalkulacka" class="btn btn--light">Spočítat splátku</a>
+            <a href="#kontakt" class="btn btn--ghost">Chci poradit</a>
+          </div>
+          <ul class="hero__badges">
+            <li><span class="dot"></span>Sazby aktualizovány <strong data-rates-updated>—</strong></li>
+            <li><span class="dot"></span>Srovnání nabídek více bank</li>
+          </ul>
+        </div>
+        <div class="hero__card" aria-hidden="true">
+          <p class="hero__card-label">Průměrná sazba · fixace 5 let</p>
+          <p class="hero__card-rate" data-hero-rate>—</p>
+          <p class="hero__card-sub">Úvěr 4 000 000 Kč na 30 let</p>
+          <p class="hero__card-pay" data-hero-pay>—</p>
+          <div class="hero__spark">
+            <span style="--h:48%"></span><span style="--h:42%"></span><span style="--h:38%"></span><span style="--h:44%"></span><span style="--h:52%"></span><span style="--h:58%"></span><span style="--h:63%"></span><span style="--h:70%"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KALKULAČKA -->
+    <section id="kalkulacka" class="section">
+      <div class="container">
+        <div class="section__head">
+          <h2>Spočítejte si splátku</h2>
+          <p>Všechny údaje můžete kdykoli změnit, výsledek se přepočítá okamžitě.</p>
+        </div>
+
+        <div class="calc">
+          <form class="calc__form card" id="calc-form" novalidate>
+            <!-- Krok 1 -->
+            <fieldset class="step">
+              <legend><span class="step__num">1</span>O co máte zájem?</legend>
+              <div class="choice" role="radiogroup">
+                <label class="choice__item">
+                  <input type="radio" name="type" value="new" checked />
+                  <span class="choice__body">
+                    <span class="choice__icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
+                    </span>
+                    <span class="choice__title">Nový úvěr</span>
+                    <span class="choice__desc">Koupě, výstavba nebo rekonstrukce</span>
+                  </span>
+                </label>
+                <label class="choice__item">
+                  <input type="radio" name="type" value="refi" />
+                  <span class="choice__body">
+                    <span class="choice__icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3M18 3v4h-4M6 21v-4h4"/></svg>
+                    </span>
+                    <span class="choice__title">Refinancování</span>
+                    <span class="choice__desc">Končí mi fixace nebo chci lepší sazbu</span>
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- Krok 2: Nový úvěr -->
+            <fieldset class="step" data-mode="new">
+              <legend><span class="step__num">2</span>Nemovitost a úvěr</legend>
+
+              <div class="field">
+                <label for="purpose">Účel úvěru</label>
+                <select id="purpose">
+                  <option>Koupě bytu</option>
+                  <option>Koupě domu</option>
+                  <option>Výstavba domu</option>
+                  <option>Koupě pozemku</option>
+                  <option>Rekonstrukce</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <div class="field__row">
+                  <label for="price">Cena nemovitosti</label>
+                  <div class="money"><input id="price" type="text" inputmode="numeric" value="5 000 000" /><span>Kč</span></div>
+                </div>
+                <input type="range" id="price-range" min="500000" max="20000000" step="50000" value="5000000" aria-label="Cena nemovitosti" />
+              </div>
+
+              <div class="field">
+                <div class="field__row">
+                  <label for="own">Vlastní zdroje</label>
+                  <div class="money"><input id="own" type="text" inputmode="numeric" value="1 000 000" /><span>Kč</span></div>
+                </div>
+                <input type="range" id="own-range" min="0" max="10000000" step="50000" value="1000000" aria-label="Vlastní zdroje" />
+                <p class="hint">Úspory, stavební spoření, peníze od rodiny…</p>
+              </div>
+
+              <div class="loan-box">
+                <span>Potřebujete si půjčit</span>
+                <strong data-loan-new>—</strong>
+                <span class="chip" data-ltv-chip>LTV —</span>
+              </div>
+            </fieldset>
+
+            <!-- Krok 2: Refinancování -->
+            <fieldset class="step" data-mode="refi" hidden>
+              <legend><span class="step__num">2</span>Současná hypotéka</legend>
+
+              <div class="field">
+                <div class="field__row">
+                  <label for="balance">Zbývá doplatit</label>
+                  <div class="money"><input id="balance" type="text" inputmode="numeric" value="3 000 000" /><span>Kč</span></div>
+                </div>
+                <input type="range" id="balance-range" min="200000" max="15000000" step="50000" value="3000000" aria-label="Zůstatek úvěru" />
+              </div>
+
+              <div class="field">
+                <div class="field__row">
+                  <label for="value">Hodnota nemovitosti</label>
+                  <div class="money"><input id="value" type="text" inputmode="numeric" value="6 000 000" /><span>Kč</span></div>
+                </div>
+                <input type="range" id="value-range" min="500000" max="25000000" step="50000" value="6000000" aria-label="Hodnota nemovitosti" />
+                <p class="hint">Stačí odhad – za kolik byste nemovitost dnes prodali.</p>
+              </div>
+
+              <div class="field-grid">
+                <div class="field">
+                  <label for="cur-rate">Současná sazba <span class="opt">nepovinné</span></label>
+                  <div class="money"><input id="cur-rate" type="text" inputmode="decimal" placeholder="např. 2,49" /><span>%</span></div>
+                </div>
+                <div class="field">
+                  <label for="topup">Chci navýšit o <span class="opt">nepovinné</span></label>
+                  <div class="money"><input id="topup" type="text" inputmode="numeric" placeholder="0" /><span>Kč</span></div>
+                </div>
+              </div>
+
+              <div class="loan-box">
+                <span>Nový úvěr celkem</span>
+                <strong data-loan-refi>—</strong>
+                <span class="chip" data-ltv-chip>LTV —</span>
+              </div>
+            </fieldset>
+
+            <!-- Krok 3 -->
+            <fieldset class="step">
+              <legend><span class="step__num">3</span>Splácení</legend>
+
+              <div class="field">
+                <div class="field__row">
+                  <label for="years" data-years-label>Doba splatnosti</label>
+                  <output class="pill" id="years-out" for="years">30 let</output>
+                </div>
+                <input type="range" id="years" min="5" max="30" step="1" value="30" aria-label="Doba splatnosti v letech" />
+                <div class="scale"><span>5 let</span><span>15 let</span><span>30 let</span></div>
+              </div>
+
+              <div class="field">
+                <span class="label">Délka fixace sazby</span>
+                <div class="segmented" id="fixations" role="group" aria-label="Délka fixace"></div>
+                <p class="hint">Po dobu fixace se sazba ani splátka nemění.</p>
+              </div>
+
+              <div class="field">
+                <label class="check">
+                  <input type="checkbox" id="young" />
+                  <span>Alespoň jednomu žadateli je méně než 36 let <small>(banka může půjčit až 90 % hodnoty)</small></span>
+                </label>
+              </div>
+
+              <div class="field">
+                <div class="field__row">
+                  <label for="income">Čistý měsíční příjem domácnosti <span class="opt">nepovinné</span></label>
+                  <div class="money"><input id="income" type="text" inputmode="numeric" placeholder="např. 80 000" /><span>Kč</span></div>
+                </div>
+                <p class="hint">Pomůže odhadnout, zda splátku banka pravděpodobně schválí.</p>
+              </div>
+            </fieldset>
+          </form>
+
+          <!-- VÝSLEDEK -->
+          <aside class="calc__result" id="vysledek" aria-live="polite">
+            <div class="result card card--dark">
+              <p class="result__label">Orientační měsíční splátka</p>
+              <p class="result__range" data-pay-range>—</p>
+              <p class="result__avg">nejčastěji kolem <strong data-pay-avg>—</strong></p>
+
+              <div class="rangebar" aria-hidden="true">
+                <div class="rangebar__track"><span class="rangebar__marker" data-marker></span></div>
+                <div class="rangebar__labels"><span>nejlepší nabídky</span><span>vyšší sazby</span></div>
+              </div>
+
+              <div class="result__compare" data-compare hidden></div>
+              <div class="result__alert" data-alert hidden></div>
+
+              <dl class="result__list">
+                <div><dt>Výše úvěru</dt><dd data-r-loan>—</dd></div>
+                <div><dt>Úroková sazba</dt><dd data-r-rate>—</dd></div>
+                <div><dt>Fixace / splatnost</dt><dd data-r-term>—</dd></div>
+                <div><dt>Poměr úvěru k hodnotě (LTV)</dt><dd data-r-ltv>—</dd></div>
+                <div data-dsti-row hidden><dt>Splátka z příjmu</dt><dd data-r-dsti>—</dd></div>
+              </dl>
+
+              <div class="donut-wrap">
+                <svg class="donut" viewBox="0 0 42 42" aria-hidden="true">
+                  <circle cx="21" cy="21" r="15.915" class="donut__bg" />
+                  <circle cx="21" cy="21" r="15.915" class="donut__seg" data-donut stroke-dasharray="0 100" stroke-dashoffset="25" />
+                </svg>
+                <div class="donut-legend">
+                  <p><span class="sw sw--a"></span>Jistina <strong data-r-principal>—</strong></p>
+                  <p><span class="sw sw--b"></span>Úroky <strong data-r-interest>—</strong></p>
+                  <p class="muted small">Celkem zaplatíte cca <strong data-r-total>—</strong> (při neměnné průměrné sazbě)</p>
+                </div>
+              </div>
+
+              <a href="#kontakt" class="btn btn--accent btn--block" data-to-contact>Chci přesnou nabídku od bank</a>
+              <p class="result__note">Jde o orientační výpočet. Přesnou sazbu vám zjistím podle vaší situace – zdarma a nezávazně.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- SAZBY -->
+    <section id="sazby" class="section section--alt">
+      <div class="container">
+        <div class="section__head">
+          <h2>Aktuální orientační sazby</h2>
+          <p>Rozpětí nabídek bank podle délky fixace. Aktualizováno <strong data-rates-updated>—</strong>.</p>
+        </div>
+        <div class="card table-card">
+          <table class="rates">
+            <thead>
+              <tr>
+                <th scope="col">Fixace</th>
+                <th scope="col">Úvěr do 80 % hodnoty</th>
+                <th scope="col">Úvěr nad 80 % (do 90 %)</th>
+              </tr>
+            </thead>
+            <tbody id="rates-body"></tbody>
+          </table>
+        </div>
+        <p class="source" data-rates-source></p>
+      </div>
+    </section>
+
+    <!-- JAK TO FUNGUJE -->
+    <section id="jak-to-funguje" class="section">
+      <div class="container">
+        <div class="section__head">
+          <h2>Jak to funguje</h2>
+          <p>Od výpočtu k podpisu bez zbytečného papírování a běhání po bankách.</p>
+        </div>
+        <ol class="steps">
+          <li class="card">
+            <span class="steps__num">1</span>
+            <h3>Spočítáte si splátku</h3>
+            <p>Kalkulačka ukáže, v jakém rozpětí se splátka u bank aktuálně pohybuje.</p>
+          </li>
+          <li class="card">
+            <span class="steps__num">2</span>
+            <h3>Porovnám nabídky bank</h3>
+            <p>Podle vašich příjmů a nemovitosti zjistím konkrétní sazby a vyberu tu nejvýhodnější.</p>
+          </li>
+          <li class="card">
+            <span class="steps__num">3</span>
+            <h3>Vyřídím to za vás</h3>
+            <p>Pomohu s dokumenty, odhadem i jednáním s bankou až do čerpání úvěru.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- KONTAKT -->
+    <section id="kontakt" class="section section--alt">
+      <div class="container contact">
+        <div class="contact__text">
+          <h2>Chcete přesnou nabídku?</h2>
+          <p>Nechte mi kontakt a ozvu se vám s konkrétními sazbami bank pro vaši situaci. Konzultace je zdarma a k ničemu vás nezavazuje.</p>
+          <ul class="ticks">
+            <li>Srovnání nabídek více bank</li>
+            <li>Vyjednání lepší sazby</li>
+            <li>Pomoc s refinancováním při konci fixace</li>
+          </ul>
+          <p class="contact__phone">Nebo zavolejte: <a data-phone href="#">—</a></p>
+        </div>
+
+        <form class="card contact__form" id="lead-form" novalidate>
+          <div class="field">
+            <label for="l-name">Jméno a příjmení</label>
+            <input id="l-name" name="name" type="text" autocomplete="name" required />
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="l-phone">Telefon</label>
+              <input id="l-phone" name="phone" type="tel" autocomplete="tel" required />
+            </div>
+            <div class="field">
+              <label for="l-email">E-mail</label>
+              <input id="l-email" name="email" type="email" autocomplete="email" required />
+            </div>
+          </div>
+          <div class="field">
+            <label for="l-msg">Zpráva <span class="opt">nepovinné</span></label>
+            <textarea id="l-msg" name="message" rows="3" placeholder="Např. kdy se vám hodí zavolat, kdy končí fixace…"></textarea>
+          </div>
+          <div class="summary" data-summary hidden>
+            <p class="summary__title">Přiložím váš výpočet</p>
+            <p data-summary-text></p>
+          </div>
+          <label class="check">
+            <input type="checkbox" id="l-consent" required />
+            <span>Souhlasím se zpracováním osobních údajů za účelem kontaktování ohledně hypotéky.</span>
+          </label>
+          <p class="form-error" data-form-error hidden></p>
+          <button type="submit" class="btn btn--block">Odeslat nezávaznou poptávku</button>
+          <div class="form-success" data-form-success hidden>
+            <strong>Děkuji, poptávka je připravená.</strong>
+            <span>Ozvu se vám co nejdříve, obvykle do jednoho pracovního dne.</span>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <a href="#vysledek" class="mobilebar" data-mobilebar aria-hidden="true" tabindex="-1">
+    <div><span>Orientační splátka</span><strong data-mobile-pay>—</strong></div>
+    <em>Zobrazit výsledek ↓</em>
+  </a>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p><strong data-brand>HypoPlán</strong> · <span data-advisor>—</span></p>
+      <p class="footer__legal">Výpočty na tomto webu jsou pouze orientační a nejsou nabídkou úvěru. Skutečná sazba a splátka závisí na posouzení banky, vaší bonitě, hodnotě nemovitosti a aktuální situaci na trhu.</p>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="rates.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
