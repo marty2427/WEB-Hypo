@@ -359,6 +359,8 @@
   });
 
   const form = $("#lead-form");
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const submitLabel = submitBtn.textContent;
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const err = $("[data-form-error]");
@@ -379,6 +381,18 @@
     }
     err.hidden = true;
 
+    // Robot vyplnil skryté pole: tváříme se, že je hotovo, ale nic neposíláme.
+    if ($("#l-botcheck").checked) {
+      submitBtn.hidden = true;
+      $("[data-form-success]").hidden = false;
+      return;
+    }
+    if (!CONFIG.formEndpoint && !CONFIG.email) {
+      err.textContent = "Formulář zatím není propojený. Zavolejte prosím na telefon výše.";
+      err.hidden = false;
+      return;
+    }
+
     const data = {
       jmeno: $("#l-name").value.trim(),
       telefon: $("#l-phone").value.trim(),
@@ -388,6 +402,8 @@
     };
     if (CONFIG.formAccessKey) Object.assign(data, { access_key: CONFIG.formAccessKey, subject: "Poptávka hypotéky – " + data.jmeno, from_name: CONFIG.brand || "Web" });
 
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Odesílám…";
     try {
       if (CONFIG.formEndpoint) {
         const res = await fetch(CONFIG.formEndpoint, {
@@ -395,16 +411,19 @@
           headers: { "Content-Type": "application/json", Accept: "application/json" },
           body: JSON.stringify(data)
         });
-        if (!res.ok) throw new Error(res.status);
-      } else if (CONFIG.email) {
+        const reply = await res.json().catch(() => ({}));
+        if (!res.ok || reply.success === false) throw new Error(res.status);
+      } else {
         const body = `Jméno: ${data.jmeno}\nTelefon: ${data.telefon}\nE-mail: ${data.email}\n\nVýpočet: ${data.vypocet}\n\n${data.zprava}`;
         location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent("Poptávka hypotéky – " + data.jmeno)}&body=${encodeURIComponent(body)}`;
       }
-      form.querySelector('button[type="submit"]').hidden = true;
+      submitBtn.hidden = true;
       $("[data-form-success]").hidden = false;
     } catch {
       err.textContent = "Odeslání se nepodařilo. Zkuste to prosím znovu, nebo zavolejte.";
       err.hidden = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = submitLabel;
     }
   });
 

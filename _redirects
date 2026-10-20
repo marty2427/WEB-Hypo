@@ -1,0 +1,4 @@
+# Interní soubory repozitáře nejsou součástí webu – přesměrovat na úvod.
+/README.md            /  301
+/NAVOD-CLOUDFLARE.md  /  301
+/tools/*              /  301

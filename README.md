@@ -19,6 +19,9 @@ jakýkoli hosting (GitHub Pages, Netlify, Vercel, Wedos…), nebo otevřít `ind
 | `config.js` | Jméno, telefon, e-mail a kam chodí poptávky |
 | `scene.js` | Živá scéna v úvodu: slunce, měsíc, hvězdy, běhající srnky a zajíci |
 | `tools/kresli_scenu.py` | Vykreslí krajinu (dům, garáž, bazén, louka) do `index.html` |
+| `assets/fonts/` | Písmo Inter uložené přímo na webu (licence OFL), bez načítání od Googlu |
+| `_headers` | Bezpečnostní hlavičky pro Cloudflare Pages (CSP, ochrana proti vložení do cizí stránky…) |
+| `_redirects` | Interní soubory repozitáře (README, návod, tools) přesměruje na úvod |
 
 ## Aktualizace sazeb
 

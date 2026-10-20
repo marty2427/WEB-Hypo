@@ -21,6 +21,23 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("assets/fonts/inter-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("assets/fonts/inter-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 body {
   margin: 0;
   font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -76,14 +93,14 @@ a { color: var(--brand); }
   color: var(--ink);
   /* barvy oblohy mění scene.js podle denní doby */
   background: linear-gradient(180deg, var(--sky-top, #e6f2fb) 0%, var(--sky-bottom, #ffffff) 70%);
-  padding: clamp(40px, 6vw, 64px) 0 clamp(130px, 12vw, 160px);
+  padding: clamp(40px, 6vw, 64px) 0 max(130px, calc(18.4vw - 90px));
   position: relative;
   overflow: hidden;
   isolation: isolate;
 }
 .hero__scene {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: -1;
-  width: 100%; height: clamp(200px, 22vw, 290px);
+  width: 100%; height: max(200px, 18.4vw);
   pointer-events: none; user-select: none;
   filter: brightness(calc(1 - .55 * var(--night, 0))) saturate(calc(1 - .35 * var(--night, 0)));
 }
@@ -159,13 +176,20 @@ a { color: var(--brand); }
 .hero__card-rate { font-size: 2.4rem; font-weight: 800; letter-spacing: -.03em; margin-bottom: .4em; color: var(--brand); }
 .hero__card-sub { font-size: .85rem; color: var(--muted); margin-bottom: .1em; }
 .hero__card-pay { font-size: 1.25rem; font-weight: 700; margin: 0; color: var(--navy); }
+/* nízké obrazovky notebooků: kompaktnější úvod, aby byla vidět kalkulačka */
+@media (min-width: 861px) and (max-height: 820px) {
+  .hero { padding-top: 28px; }
+  .hero h1 { font-size: clamp(2rem, 3.6vw, 2.75rem); }
+  .hero__cta { margin: 20px 0 16px; }
+  .eyebrow { margin-bottom: .6em; }
+}
 @media (max-width: 860px) {
-  .hero { padding-bottom: 200px; }
+  .hero { padding-bottom: 185px; }
   .sky__sun { width: 44px; height: 44px; }
   .sky__moon { width: 36px; height: 36px; }
   .hero__inner { grid-template-columns: 1fr; }
   .hero__card { display: none; }
-  .hero__scene { height: 200px; }
+  .hero__scene { height: 190px; }
   .hero::after { display: none; }
 }
 
@@ -368,7 +392,12 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 8px rgba
   opacity: 0; transform: translateY(-6px);
   transition: background .2s, color .2s, opacity .3s ease, transform .4s cubic-bezier(.2, .8, .2, 1);
 }
-.select.is-open [role="option"] { opacity: 1; transform: none; transition-delay: 0s, 0s, calc(.08s + var(--i) * .05s), calc(.08s + var(--i) * .05s); }
+.select.is-open [role="option"] { opacity: 1; transform: none; transition-delay: 0s, 0s, var(--d, .08s), var(--d, .08s); }
+.select__menu [role="option"]:nth-child(2) { --d: .13s; }
+.select__menu [role="option"]:nth-child(3) { --d: .18s; }
+.select__menu [role="option"]:nth-child(4) { --d: .23s; }
+.select__menu [role="option"]:nth-child(5) { --d: .28s; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .select__menu [role="option"].is-active { background: var(--brand-soft); color: var(--brand-ink); }
 .select__menu [role="option"][aria-selected="true"] { font-weight: 700; color: var(--brand-ink); }
 .select__check { width: 18px; height: 18px; fill: none; stroke: var(--brand); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }

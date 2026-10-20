@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Hypoteční kalkulačka – orientační splátka hypotéky</title>
   <meta name="description" content="Spočítejte si orientační měsíční splátku hypotéky – nový úvěr i refinancování podle aktuálních sazeb bank. Zdarma a nezávazně." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preload" href="assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f766e'/%3E%3Cpath d='M8 17l8-7 8 7v7h-5v-5h-6v5H8z' fill='white'/%3E%3C/svg%3E" />
 </head>
@@ -409,11 +407,11 @@
                     <svg class="select__chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
                   </button>
                   <ul class="select__menu" id="purpose-list" role="listbox" tabindex="-1" aria-labelledby="purpose-label">
-                    <li role="option" id="purpose-opt-0" data-value="Koupě bytu" aria-selected="true" style="--i:0">Koupě bytu<svg class="select__check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg></li>
-                    <li role="option" id="purpose-opt-1" data-value="Koupě domu" aria-selected="false" style="--i:1">Koupě domu<svg class="select__check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg></li>
-                    <li role="option" id="purpose-opt-2" data-value="Výstavba domu" aria-selected="false" style="--i:2">Výstavba domu<svg class="select__check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg></li>
-                    <li role="option" id="purpose-opt-3" data-value="Koupě pozemku" aria-selected="false" style="--i:3">Koupě pozemku<svg class="select__check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg></li>
-                    <li role="option" id="purpose-opt-4" data-value="Rekonstrukce" aria-selected="false" style="--i:4">Rekonstrukce<svg class="select__check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg></li>
+                    <li role="option" id="purpose-opt-0" data-value="Koupě bytu" aria-selected="true">Koupě bytu<svg class="select__check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg></li>
+                    <li role="option" id="purpose-opt-1" data-value="Koupě domu" aria-selected="false">Koupě domu<svg class="select__check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg></li>
+                    <li role="option" id="purpose-opt-2" data-value="Výstavba domu" aria-selected="false">Výstavba domu<svg class="select__check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg></li>
+                    <li role="option" id="purpose-opt-3" data-value="Koupě pozemku" aria-selected="false">Koupě pozemku<svg class="select__check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg></li>
+                    <li role="option" id="purpose-opt-4" data-value="Rekonstrukce" aria-selected="false">Rekonstrukce<svg class="select__check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg></li>
                   </ul>
                 </div>
               </div>
@@ -604,26 +602,28 @@
         <form class="card contact__form" id="lead-form" novalidate>
           <div class="field">
             <label for="l-name">Jméno a příjmení</label>
-            <input id="l-name" name="name" type="text" autocomplete="name" required />
+            <input id="l-name" name="name" type="text" autocomplete="name" maxlength="100" required />
           </div>
           <div class="field-grid">
             <div class="field">
               <label for="l-phone">Telefon</label>
-              <input id="l-phone" name="phone" type="tel" autocomplete="tel" required />
+              <input id="l-phone" name="phone" type="tel" autocomplete="tel" maxlength="30" required />
             </div>
             <div class="field">
               <label for="l-email">E-mail</label>
-              <input id="l-email" name="email" type="email" autocomplete="email" required />
+              <input id="l-email" name="email" type="email" autocomplete="email" maxlength="120" required />
             </div>
           </div>
           <div class="field">
             <label for="l-msg">Zpráva <span class="opt">nepovinné</span></label>
-            <textarea id="l-msg" name="message" rows="3" placeholder="Např. kdy se vám hodí zavolat, kdy končí fixace…"></textarea>
+            <textarea id="l-msg" name="message" rows="3" maxlength="2000" placeholder="Např. kdy se vám hodí zavolat, kdy končí fixace…"></textarea>
           </div>
           <div class="summary" data-summary hidden>
             <p class="summary__title">Přiložím váš výpočet</p>
             <p data-summary-text></p>
           </div>
+          <!-- past na roboty: skryté pole, které člověk nevyplní -->
+          <input type="checkbox" name="botcheck" id="l-botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
           <label class="check">
             <input type="checkbox" id="l-consent" required />
             <span>Souhlasím se zpracováním osobních údajů za účelem kontaktování ohledně hypotéky.</span>
@@ -631,7 +631,7 @@
           <p class="form-error" data-form-error hidden></p>
           <button type="submit" class="btn btn--block">Odeslat nezávaznou poptávku</button>
           <div class="form-success" data-form-success hidden>
-            <strong>Děkuji, poptávka je připravená.</strong>
+            <strong>Děkuji, poptávka je odeslaná.</strong>
             <span>Ozvu se vám co nejdříve, obvykle do jednoho pracovního dne.</span>
           </div>
         </form>
