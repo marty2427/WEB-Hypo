@@ -11,7 +11,8 @@
   const kc = (n) => nf.format(Math.round(n)) + " Kč";
   const pct = (n, d = 2) =>
     n.toLocaleString("cs-CZ", { minimumFractionDigits: d, maximumFractionDigits: d }) + " %";
-  const years = (n) => n + " " + (n === 1 ? "rok" : n < 5 ? "roky" : "let");
+  const yearWord = (n) => (n === 1 ? "rok" : n < 5 ? "roky" : "let");
+  const years = (n) => n + " " + yearWord(n);
   const roundTo = (n, step) => Math.round(n / step) * step;
   const parseNum = (str) => {
     const n = parseFloat(String(str).replace(/\s/g, "").replace(",", ".").replace(/[^\d.]/g, ""));
@@ -33,12 +34,14 @@
   const state = {
     type: "new",
     fixation: RATES.defaultFixation || RATES.fixations[0].years,
+    purpose: "Koupě bytu",
+    years: 30,
     summary: ""
   };
 
   /* ---------- Statické texty ---------- */
-  const updated = new Date(RATES.updated + "T00:00:00");
-  const updatedText = updated.toLocaleDateString("cs-CZ", { day: "numeric", month: "long", year: "numeric" });
+  // Návštěvník vidí vždy dnešní datum.
+  const updatedText = new Date().toLocaleDateString("cs-CZ", { day: "numeric", month: "long", year: "numeric" });
   $$("[data-rates-updated]").forEach((el) => (el.textContent = updatedText));
   $("[data-rates-source]").textContent = RATES.sourceNote;
   if (CONFIG.brand) $$("[data-brand]").forEach((el) => (el.textContent = CONFIG.brand));
@@ -111,15 +114,105 @@
   }
   ["price", "own", "balance", "value", "income"].forEach(bindMoney);
 
+  /* ---------- Doba splatnosti (u refinancování i ručně) ---------- */
   const yearsRange = $("#years");
+  const yearsInput = $("#years-input");
+  const clampYears = (n) => Math.min(Math.max(Math.round(n), +yearsRange.min), +yearsRange.max);
   yearsRange.addEventListener("input", () => {
-    paintRange(yearsRange);
+    state.years = +yearsRange.value;
+    yearsInput.value = state.years;
     update();
   });
-  paintRange(yearsRange);
+  yearsInput.addEventListener("input", () => {
+    const n = parseNum(yearsInput.value);
+    if (n >= +yearsRange.min && n <= +yearsRange.max) {
+      state.years = Math.round(n);
+      yearsRange.value = state.years;
+      update();
+    }
+  });
+  yearsInput.addEventListener("blur", () => {
+    state.years = clampYears(parseNum(yearsInput.value) || state.years);
+    yearsInput.value = state.years;
+    yearsRange.value = state.years;
+    update();
+  });
+
+  /* ---------- Kliknutím do pole se označí celý obsah, rovnou se dá přepsat ---------- */
+  $$(".money input").forEach((input) => {
+    let fresh = false;
+    input.addEventListener("focus", () => {
+      fresh = true;
+      input.select();
+      setTimeout(() => fresh && input.select(), 0);
+    });
+    input.addEventListener("mouseup", (e) => {
+      if (fresh) e.preventDefault();
+      fresh = false;
+    });
+    input.addEventListener("input", () => (fresh = false));
+    input.addEventListener("blur", () => (fresh = false));
+  });
+
+  /* ---------- Rozbalovací výběr (účel úvěru) ---------- */
+  $$("[data-select]").forEach((wrap) => {
+    const btn = $(".select__btn", wrap);
+    const list = $(".select__menu", wrap);
+    const opts = $$("[role=option]", list);
+    let active = 0;
+
+    const setActive = (i) => {
+      active = (i + opts.length) % opts.length;
+      opts.forEach((o, j) => o.classList.toggle("is-active", j === active));
+      list.setAttribute("aria-activedescendant", opts[active].id);
+    };
+    const open = () => {
+      wrap.classList.add("is-open");
+      btn.setAttribute("aria-expanded", "true");
+      setActive(Math.max(opts.findIndex((o) => o.getAttribute("aria-selected") === "true"), 0));
+      list.focus({ preventScroll: true });
+    };
+    const close = (refocus = true) => {
+      wrap.classList.remove("is-open");
+      btn.setAttribute("aria-expanded", "false");
+      if (refocus) btn.focus({ preventScroll: true });
+    };
+    const choose = (i) => {
+      opts.forEach((o, j) => o.setAttribute("aria-selected", String(j === i)));
+      state.purpose = opts[i].dataset.value;
+      $("[data-select-value]", wrap).textContent = state.purpose;
+      close();
+      update();
+    };
+
+    btn.addEventListener("click", () => (wrap.classList.contains("is-open") ? close() : open()));
+    btn.addEventListener("keydown", (e) => {
+      if (["ArrowDown", "ArrowUp", "Enter", " "].includes(e.key)) {
+        e.preventDefault();
+        open();
+      }
+    });
+    list.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown") setActive(active + 1);
+      else if (e.key === "ArrowUp") setActive(active - 1);
+      else if (e.key === "Home") setActive(0);
+      else if (e.key === "End") setActive(opts.length - 1);
+      else if (e.key === "Enter" || e.key === " ") choose(active);
+      else if (e.key === "Escape") close();
+      else if (e.key === "Tab") return close(false);
+      else return;
+      e.preventDefault();
+    });
+    opts.forEach((o, i) => {
+      o.addEventListener("click", () => choose(i));
+      o.addEventListener("mousemove", () => setActive(i));
+    });
+    document.addEventListener("click", (e) => {
+      if (wrap.classList.contains("is-open") && !wrap.contains(e.target)) close(false);
+    });
+  });
 
   $("#young").addEventListener("change", update);
-  $("#purpose").addEventListener("change", update);
 
   $$('input[name="type"]').forEach((r) =>
     r.addEventListener("change", () => {
@@ -133,6 +226,14 @@
     const isNew = state.type === "new";
     $$("[data-mode]").forEach((el) => (el.hidden = el.dataset.mode !== state.type));
     $("[data-years-label]").textContent = isNew ? "Doba splatnosti" : "Zbývající doba splácení";
+    $$("[data-show]").forEach((el) => (el.hidden = el.dataset.show !== state.type));
+    // U refinancování může zbývat i méně než 5 let
+    yearsRange.min = isNew ? 5 : 1;
+    $(".scale span").textContent = years(+yearsRange.min);
+    if (isNew && state.years < 5) state.years = 5;
+    yearsRange.value = state.years;
+    yearsInput.value = state.years;
+    paintRange(yearsRange);
     $$("[data-fix]").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.fix === state.fixation)));
 
     let loan, value;
@@ -144,8 +245,9 @@
       loan = parseNum($("#balance").value);
     }
 
-    const yrs = +yearsRange.value;
+    const yrs = state.years;
     $("#years-out").textContent = years(yrs);
+    $("[data-years-unit]").textContent = yearWord(yrs);
 
     const young = $("#young").checked;
     const ltvLimit = young ? 90 : 80;
@@ -210,7 +312,7 @@
 
     // Shrnutí pro poptávku
     const lines = isNew
-      ? [`Nový úvěr – ${$("#purpose").value.toLowerCase()}`, `cena nemovitosti ${kc(value)}`, `úvěr ${kc(loan)} (LTV ${Math.round(ltv)} %)`]
+      ? [`Nový úvěr – ${state.purpose.toLowerCase()}`, `cena nemovitosti ${kc(value)}`, `úvěr ${kc(loan)} (LTV ${Math.round(ltv)} %)`]
       : [`Refinancování`, `zůstatek ${kc(loan)}`, `hodnota nemovitosti ${kc(value)} (LTV ${Math.round(ltv)} %)`];
     lines.push(`splatnost ${years(yrs)}`, `fixace ${years(state.fixation)}`);
     if (loan > 0) lines.push(`orientační splátka ${nf.format(roundTo(pay.min, 100))} – ${kc(roundTo(pay.max, 100))}`);

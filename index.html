@@ -32,6 +32,7 @@
   <main>
     <!-- HERO -->
     <section class="hero">
+      <img class="hero__scene" src="assets/domek.svg" alt="" aria-hidden="true" />
       <div class="container hero__inner">
         <div class="hero__text">
           <p class="eyebrow">Hypoteční kalkulačka</p>
@@ -43,7 +44,7 @@
           </div>
           <ul class="hero__badges">
             <li><span class="dot"></span>Sazby aktualizovány <strong data-rates-updated>—</strong></li>
-            <li><span class="dot"></span>Srovnání nabídek více bank</li>
+            <li><span class="dot"></span>Srovnání nabídek všech bank na českém trhu</li>
           </ul>
         </div>
         <div class="hero__card" aria-hidden="true">
@@ -51,9 +52,6 @@
           <p class="hero__card-rate" data-hero-rate>—</p>
           <p class="hero__card-sub">Úvěr 4 000 000 Kč na 30 let</p>
           <p class="hero__card-pay" data-hero-pay>—</p>
-          <div class="hero__spark">
-            <span style="--h:48%"></span><span style="--h:42%"></span><span style="--h:38%"></span><span style="--h:44%"></span><span style="--h:52%"></span><span style="--h:58%"></span><span style="--h:63%"></span><span style="--h:70%"></span>
-          </div>
         </div>
       </div>
     </section>
@@ -100,14 +98,20 @@
               <legend><span class="step__num">2</span>Nemovitost a úvěr</legend>
 
               <div class="field">
-                <label for="purpose">Účel úvěru</label>
-                <select id="purpose">
-                  <option>Koupě bytu</option>
-                  <option>Koupě domu</option>
-                  <option>Výstavba domu</option>
-                  <option>Koupě pozemku</option>
-                  <option>Rekonstrukce</option>
-                </select>
+                <label id="purpose-label" for="purpose">Účel úvěru</label>
+                <div class="select" data-select>
+                  <button type="button" class="select__btn" id="purpose" aria-haspopup="listbox" aria-expanded="false" aria-controls="purpose-list" aria-labelledby="purpose-label purpose">
+                    <span data-select-value>Koupě bytu</span>
+                    <svg class="select__chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
+                  </button>
+                  <ul class="select__menu" id="purpose-list" role="listbox" tabindex="-1" aria-labelledby="purpose-label">
+                    <li role="option" id="purpose-opt-0" data-value="Koupě bytu" aria-selected="true" style="--i:0">Koupě bytu<svg class="select__check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg></li>
+                    <li role="option" id="purpose-opt-1" data-value="Koupě domu" aria-selected="false" style="--i:1">Koupě domu<svg class="select__check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg></li>
+                    <li role="option" id="purpose-opt-2" data-value="Výstavba domu" aria-selected="false" style="--i:2">Výstavba domu<svg class="select__check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg></li>
+                    <li role="option" id="purpose-opt-3" data-value="Koupě pozemku" aria-selected="false" style="--i:3">Koupě pozemku<svg class="select__check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg></li>
+                    <li role="option" id="purpose-opt-4" data-value="Rekonstrukce" aria-selected="false" style="--i:4">Rekonstrukce<svg class="select__check" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3 3 7-7"/></svg></li>
+                  </ul>
+                </div>
               </div>
 
               <div class="field">
@@ -169,7 +173,8 @@
               <div class="field">
                 <div class="field__row">
                   <label for="years" data-years-label>Doba splatnosti</label>
-                  <output class="pill" id="years-out" for="years">30 let</output>
+                  <output class="pill" id="years-out" for="years" data-show="new">30 let</output>
+                  <div class="money money--years" data-show="refi" hidden><input id="years-input" type="text" inputmode="numeric" value="30" aria-label="Zbývající doba splácení v letech" /><span data-years-unit>let</span></div>
                 </div>
                 <input type="range" id="years" min="5" max="30" step="1" value="30" aria-label="Doba splatnosti v letech" />
                 <div class="scale"><span>5 let</span><span>15 let</span><span>30 let</span></div>
@@ -267,7 +272,7 @@
           <li class="card">
             <span class="steps__num">2</span>
             <h3>Porovnám nabídky bank</h3>
-            <p>Podle vašich příjmů a nemovitosti zjistím konkrétní sazby a vyberu tu nejvýhodnější.</p>
+            <p>Srovnám nabídky všech bank na českém trhu podle vašich příjmů a nemovitosti a vyberu tu nejvýhodnější.</p>
           </li>
           <li class="card">
             <span class="steps__num">3</span>
@@ -285,7 +290,7 @@
           <h2>Chcete přesnou nabídku?</h2>
           <p>Nechte mi kontakt a ozvu se vám s konkrétními sazbami bank pro vaši situaci. Konzultace je zdarma a k ničemu vás nezavazuje.</p>
           <ul class="ticks">
-            <li>Srovnání nabídek více bank</li>
+            <li>Srovnání nabídek všech bank na českém trhu</li>
             <li>Vyjednání lepší sazby</li>
             <li>Pomoc s refinancováním při konci fixace</li>
           </ul>
@@ -338,7 +343,6 @@
   <footer class="footer">
     <div class="container footer__inner">
       <p><strong data-brand>HypoPlán</strong> · <span data-advisor>—</span></p>
-      <p class="footer__legal">Výpočty na tomto webu jsou pouze orientační a nejsou nabídkou úvěru. Skutečná sazba a splátka závisí na posouzení banky, vaší bonitě, hodnotě nemovitosti a aktuální situaci na trhu.</p>
     </div>
   </footer>
 

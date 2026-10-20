@@ -17,10 +17,11 @@ jakýkoli hosting (GitHub Pages, Netlify, Vercel, Wedos…), nebo otevřít `ind
 | `app.js` | Výpočet splátky, LTV, srovnání při refinancování, formulář |
 | `rates.js` | **Aktuální sazby** – jediné místo, kde se mění |
 | `config.js` | Jméno, telefon, e-mail a kam chodí poptávky |
+| `assets/domek.svg` | Ilustrace domu se zahradou v úvodu stránky |
 
 ## Aktualizace sazeb
 
-Upravte `rates.js`: datum `updated` a pro každou fixaci rozpětí `min` / `avg` / `max`
+Upravte `rates.js`: pro každou fixaci rozpětí `min` / `avg` / `max`
 zvlášť pro úvěry do 80 % LTV (`ltv80`) a nad 80 % LTV (`ltv90`).
 
 Výchozí hodnoty vycházejí z veřejných průměrných nabídkových sazeb bank (Swiss Life
@@ -28,6 +29,13 @@ Hypoindex, říjen 2026). Do budoucna se mají plnit z interních informací –
 s aktuálními sazbami bank. Formát `rates.js` je navržený tak, aby ho šlo snadno
 přepisovat automaticky (např. pravidelnou úlohou, která přečte e-maily se sazbami
 a soubor aktualizuje).
+
+Návštěvníkům se u sazeb vždy zobrazuje dnešní datum.
+
+## Zveřejnění
+
+Návod, jak web dostat online přes Cloudflare Pages (včetně zadání pro Cowork), je v
+[NAVOD-CLOUDFLARE.md](NAVOD-CLOUDFLARE.md).
 
 ## Poptávkový formulář
 
