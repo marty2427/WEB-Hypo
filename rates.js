@@ -6,21 +6,22 @@
  *  - ltv90 = úvěr nad 80 % a do 90 % hodnoty nemovitosti
  *  - min / max = rozpětí nabídek bank, avg = průměrná (nejpravděpodobnější) sazba
  *
- * Zdroj aktuálních hodnot: průměrné nabídkové sazby bank dle Swiss Life Hypoindexu
- * (říjen 2026: průměr 5,79 %, fixace 1 rok 5,42 %, fixace 10 let 6,35 % do 80 % LTV).
- * Fixace 3, 5 a 7 let jsou dopočtené odhady. Později se budou plnit z interních
- * informací (e-maily s aktuálními sazbami bank).
+ * Zdroj aktuálních hodnot: Swiss Life Hypoindex, říjen 2026 (zveřejněno 7. 10. 2026),
+ * průměr 5,79 %. Do 80 % LTV: 3 roky 5,53 %, 5 let 5,84 %, 10 let 6,35 %;
+ * nad 80 % LTV: 3 roky 5,84 %, 5 let 6,15 %, 10 let 6,61 %.
+ * Odhady: fixace 7 let (průměr 5 a 10 let) a hodnoty min/max (průměr ∓ 0,55 p. b.).
+ * Sazby každý týden kontroluje naplánovaná úloha „Týdenní aktualizace sazeb hypoték“.
  */
 window.HYPO_RATES = {
   // Datum poslední úpravy sazeb (interní údaj). Web návštěvníkům ukazuje vždy dnešní datum.
-  updated: "2026-10-08",
+  updated: "2026-10-20",
   sourceNote:
     "Orientační rozpětí vychází z průměrných nabídkových sazeb českých bank (Swiss Life Hypoindex, říjen 2026). Konkrétní sazba závisí na bance, vaší bonitě a poměru úvěru k hodnotě nemovitosti.",
   defaultFixation: 5,
   fixations: [
-    { years: 3,  ltv80: { min: 4.99, avg: 5.55, max: 6.09 }, ltv90: { min: 5.29, avg: 5.85, max: 6.39 } },
-    { years: 5,  ltv80: { min: 5.19, avg: 5.75, max: 6.29 }, ltv90: { min: 5.49, avg: 6.05, max: 6.59 } },
-    { years: 7,  ltv80: { min: 5.39, avg: 5.95, max: 6.49 }, ltv90: { min: 5.69, avg: 6.25, max: 6.79 } },
-    { years: 10, ltv80: { min: 5.79, avg: 6.35, max: 6.89 }, ltv90: { min: 6.09, avg: 6.65, max: 7.19 } }
+    { years: 3,  ltv80: { min: 4.98, avg: 5.53, max: 6.08 }, ltv90: { min: 5.29, avg: 5.84, max: 6.39 } },
+    { years: 5,  ltv80: { min: 5.29, avg: 5.84, max: 6.39 }, ltv90: { min: 5.60, avg: 6.15, max: 6.70 } },
+    { years: 7,  ltv80: { min: 5.55, avg: 6.10, max: 6.65 }, ltv90: { min: 5.83, avg: 6.38, max: 6.93 } },
+    { years: 10, ltv80: { min: 5.80, avg: 6.35, max: 6.90 }, ltv90: { min: 6.06, avg: 6.61, max: 7.16 } }
   ]
 };
