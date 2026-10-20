@@ -155,19 +155,8 @@
                 <p class="hint">Stačí odhad – za kolik byste nemovitost dnes prodali.</p>
               </div>
 
-              <div class="field-grid">
-                <div class="field">
-                  <label for="cur-rate">Současná sazba <span class="opt">nepovinné</span></label>
-                  <div class="money"><input id="cur-rate" type="text" inputmode="decimal" placeholder="např. 2,49" /><span>%</span></div>
-                </div>
-                <div class="field">
-                  <label for="topup">Chci navýšit o <span class="opt">nepovinné</span></label>
-                  <div class="money"><input id="topup" type="text" inputmode="numeric" placeholder="0" /><span>Kč</span></div>
-                </div>
-              </div>
-
               <div class="loan-box">
-                <span>Nový úvěr celkem</span>
+                <span>Výše úvěru k refinancování</span>
                 <strong data-loan-refi>—</strong>
                 <span class="chip" data-ltv-chip>LTV —</span>
               </div>
@@ -221,7 +210,6 @@
                 <div class="rangebar__labels"><span>nejlepší nabídky</span><span>vyšší sazby</span></div>
               </div>
 
-              <div class="result__compare" data-compare hidden></div>
               <div class="result__alert" data-alert hidden></div>
 
               <dl class="result__list">
@@ -231,18 +219,6 @@
                 <div><dt>Poměr úvěru k hodnotě (LTV)</dt><dd data-r-ltv>—</dd></div>
                 <div data-dsti-row hidden><dt>Splátka z příjmu</dt><dd data-r-dsti>—</dd></div>
               </dl>
-
-              <div class="donut-wrap">
-                <svg class="donut" viewBox="0 0 42 42" aria-hidden="true">
-                  <circle cx="21" cy="21" r="15.915" class="donut__bg" />
-                  <circle cx="21" cy="21" r="15.915" class="donut__seg" data-donut stroke-dasharray="0 100" stroke-dashoffset="25" />
-                </svg>
-                <div class="donut-legend">
-                  <p><span class="sw sw--a"></span>Jistina <strong data-r-principal>—</strong></p>
-                  <p><span class="sw sw--b"></span>Úroky <strong data-r-interest>—</strong></p>
-                  <p class="muted small">Celkem zaplatíte cca <strong data-r-total>—</strong> (při neměnné průměrné sazbě)</p>
-                </div>
-              </div>
 
               <a href="#kontakt" class="btn btn--accent btn--block" data-to-contact>Chci přesnou nabídku od bank</a>
               <p class="result__note">Jde o orientační výpočet. Přesnou sazbu vám zjistím podle vaší situace – zdarma a nezávazně.</p>

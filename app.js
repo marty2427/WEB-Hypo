@@ -109,10 +109,7 @@
       paintRange(range);
     }
   }
-  ["price", "own", "balance", "value", "topup", "income"].forEach(bindMoney);
-
-  const curRate = $("#cur-rate");
-  curRate.addEventListener("input", update);
+  ["price", "own", "balance", "value", "income"].forEach(bindMoney);
 
   const yearsRange = $("#years");
   yearsRange.addEventListener("input", () => {
@@ -144,7 +141,7 @@
       loan = Math.max(value - parseNum($("#own").value), 0);
     } else {
       value = parseNum($("#value").value);
-      loan = parseNum($("#balance").value) + parseNum($("#topup").value);
+      loan = parseNum($("#balance").value);
     }
 
     const yrs = +yearsRange.value;
@@ -204,44 +201,17 @@
       alert.hidden = false;
       alert.innerHTML = isNew
         ? `Banky běžně půjčí nejvýše <strong>${ltvLimit} %</strong> hodnoty nemovitosti. Chybí vám cca <strong>${kc(missing)}</strong> vlastních zdrojů – ozvěte se, často se dá vyřešit např. zástavou další nemovitosti.`
-        : `Úvěr přesahuje <strong>${ltvLimit} %</strong> hodnoty nemovitosti. Zkuste nižší navýšení, nebo se ozvěte – řešení se často najde.`;
+        : `Úvěr přesahuje <strong>${ltvLimit} %</strong> hodnoty nemovitosti. Ozvěte se, řešení se často najde.`;
     } else {
       alert.hidden = true;
     }
-
-    // Srovnání se současnou splátkou (refinancování)
-    const compare = $("[data-compare]");
-    const cur = parseNum(curRate.value);
-    if (!isNew && cur > 0 && loan > 0) {
-      const curPay = annuity(parseNum($("#balance").value), cur, yrs);
-      const diff = roundTo(curPay - pay.avg, 100);
-      compare.hidden = false;
-      compare.classList.toggle("is-up", diff < 0);
-      compare.innerHTML =
-        `Současná splátka při ${pct(cur)}: <strong>${kc(roundTo(curPay, 100))}</strong><br>` +
-        (diff >= 0
-          ? `Refinancováním můžete ušetřit cca <strong>${kc(diff)}</strong> měsíčně.`
-          : `Při dnešních sazbách by splátka vzrostla o cca <strong>${kc(-diff)}</strong>. Porovnáním nabídek bank lze nárůst výrazně zmírnit.`);
-    } else {
-      compare.hidden = true;
-    }
-
-    // Jistina vs. úroky
-    const total = pay.avg * yrs * 12;
-    const interest = Math.max(total - loan, 0);
-    const share = total > 0 ? (interest / total) * 100 : 0;
-    $("[data-donut]").setAttribute("stroke-dasharray", `${share} ${100 - share}`);
-    $("[data-r-principal]").textContent = kc(loan);
-    $("[data-r-interest]").textContent = kc(roundTo(interest, 1000));
-    $("[data-r-total]").textContent = kc(roundTo(total, 1000));
 
     renderRatesTable();
 
     // Shrnutí pro poptávku
     const lines = isNew
       ? [`Nový úvěr – ${$("#purpose").value.toLowerCase()}`, `cena nemovitosti ${kc(value)}`, `úvěr ${kc(loan)} (LTV ${Math.round(ltv)} %)`]
-      : [`Refinancování`, `zůstatek ${kc(parseNum($("#balance").value))}`, `hodnota nemovitosti ${kc(value)}`, `nový úvěr ${kc(loan)} (LTV ${Math.round(ltv)} %)`];
-    if (!isNew && cur > 0) lines.push(`současná sazba ${pct(cur)}`);
+      : [`Refinancování`, `zůstatek ${kc(loan)}`, `hodnota nemovitosti ${kc(value)} (LTV ${Math.round(ltv)} %)`];
     lines.push(`splatnost ${years(yrs)}`, `fixace ${years(state.fixation)}`);
     if (loan > 0) lines.push(`orientační splátka ${nf.format(roundTo(pay.min, 100))} – ${kc(roundTo(pay.max, 100))}`);
     if (income > 0) lines.push(`příjem domácnosti ${kc(income)}`);
