@@ -64,7 +64,7 @@
     $("#rates-body").innerHTML = RATES.fixations
       .map((f) => {
         const cell = (b) =>
-          `<td><span class="r-range">${pct(b.min)} – ${pct(b.max)}</span><span class="r-avg">průměr ${pct(b.avg)}</span></td>`;
+          `<td><span class="r-range">${pct(b.min).replace(" %", "")} – ${pct(b.max)}</span><span class="r-avg">průměr ${pct(b.avg)}</span></td>`;
         const active = f.years === state.fixation ? ' class="is-active"' : "";
         return `<tr${active}><td>${years(f.years)}</td>${cell(f.ltv80)}${cell(f.ltv90)}</tr>`;
       })

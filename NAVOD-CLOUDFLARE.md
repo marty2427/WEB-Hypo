@@ -1,105 +1,89 @@
-# Jak dostat web online přes Cloudflare
+# Zveřejnění webu přes Cloudflare – všechno udělá Cowork
 
-Web je čistě statický (HTML, CSS, JS), nic se nesestavuje. Na Cloudflare Pages ho
-proto stačí připojit k GitHubu a Cloudflare ho sám zveřejní. Hosting je zdarma
-a každá další změna v repozitáři se na webu objeví automaticky během minuty.
+**Co uděláte vy:** zkopírujete celý text v rámečku níže a vložíte ho do Coworku.
+Nic dalšího nastavovat nemusíte. Cowork vše provede sám a zeptá se vás jen na údaje,
+které nemůže znát (jméno, telefon, kam chodí poptávky, případně doména).
 
-Výsledek: web poběží na adrese typu `https://web-hypo.pages.dev` a volitelně
-na vaší vlastní doméně (např. `www.vase-hypoteka.cz`).
-
----
-
-## Než začnete
-
-1. **Vyplňte `config.js`** (přímo na GitHubu: otevřít soubor → ikona tužky → upravit → *Commit changes*):
-   - `brand` – název webu (teď je tam pracovní „HypoPlán“),
-   - `advisorName` – vaše jméno,
-   - `phone` – telefon,
-   - `formEndpoint` – adresa, kam se pošle poptávka z formuláře (viz krok 5).
-     Dokud není vyplněná ani ona, ani `email`, poptávky z webu nikam neodcházejí.
-2. **Rozhodněte, ze které větve se bude web zveřejňovat.** Hotový web je teď ve větvi
-   `claude/admiring-galileo-rps00e`. Doporučuji ho sloučit do hlavní větve `main`
-   (pull request → *Merge*) a zveřejňovat z `main`. Případně lze v Cloudflare zvolit
-   přímo tuto větev.
-
----
-
-## Krok 1 – Účet na Cloudflare
-
-1. Otevřete <https://dash.cloudflare.com/sign-up> a založte si účet (stačí e-mail a heslo, tarif Free).
-2. Potvrďte e-mail.
-
-## Krok 2 – Vytvoření projektu Pages
-
-1. V Cloudflare dashboardu v levém menu otevřete **Workers & Pages** (bývá pod *Compute*).
-2. Klikněte na **Create** / **Create application**.
-3. Přepněte na záložku **Pages** (pokud ji nevidíte, dole bývá odkaz *Looking to deploy Pages? Get started*).
-4. Zvolte **Connect to Git** (Importovat existující Git repozitář).
-5. Přihlaste se ke **GitHubu** a povolte Cloudflare přístup k repozitáři **`WEB-Hypo`**
-   (stačí vybrat jen tento jeden repozitář).
-6. Vyberte repozitář `marty2427/WEB-Hypo` → **Begin setup**.
-
-## Krok 3 – Nastavení sestavení
-
-| Pole | Hodnota |
-| --- | --- |
-| Project name | `web-hypo` (bude součástí adresy `web-hypo.pages.dev`) |
-| Production branch | `main` (nebo `claude/admiring-galileo-rps00e`) |
-| Framework preset | **None** |
-| Build command | *nechat prázdné* |
-| Build output directory | `/` |
-
-Klikněte na **Save and Deploy**. Za chvíli bude web běžet na `https://web-hypo.pages.dev`.
-
-## Krok 4 – Vlastní doména (volitelné)
-
-1. V projektu otevřete záložku **Custom domains** → **Set up a custom domain**.
-2. Zadejte doménu, např. `www.vase-hypoteka.cz`.
-3. Pokud doménu spravuje Cloudflare, DNS záznam se nastaví sám.
-   Pokud je doména u jiného registrátora (Wedos, Forpsi, Active24…), přidejte u něj
-   záznam **CNAME** `www` → `web-hypo.pages.dev`. Cloudflare ukáže přesné hodnoty.
-4. HTTPS certifikát se vystaví automaticky (obvykle do několika minut).
-
-## Krok 5 – Aby poptávky z formuláře chodily k vám
-
-Nejjednodušší je bezplatná služba **Formspree**:
-
-1. Na <https://formspree.io> si založte účet a vytvořte nový formulář (*New form*),
-   jako cílový e-mail zadejte ten, kam chcete poptávky dostávat.
-2. Zkopírujte adresu formuláře, vypadá jako `https://formspree.io/f/abcdwxyz`.
-3. Vložte ji do `config.js` do `formEndpoint: "https://formspree.io/f/abcdwxyz"` a uložte.
-4. Web se sám znovu zveřejní. Vyzkoušejte odeslat poptávku – první zprávu je ve Formspree
-   potřeba potvrdit.
-
-## Další úpravy
-
-Cokoli změníte v repozitáři (sazby v `rates.js`, kontakty v `config.js`, texty v `index.html`)
-a uložíte do zveřejňované větve, Cloudflare do minuty nasadí na web.
+Výsledek: web poběží na adrese typu `https://web-hypo.pages.dev` (zdarma), případně
+na vaší vlastní doméně. Každá další změna v repozitáři se na webu objeví automaticky.
 
 ---
 
 ## Zadání pro Cowork (zkopírujte celé)
 
-> Pomoz mi zveřejnit můj web s hypoteční kalkulačkou přes Cloudflare Pages. Postupuj
-> v prohlížeči krok za krokem a u každého přihlášení, ověření (2FA) nebo platby se zastav
-> a nech mě to udělat ručně. Nic neplať, používej jen tarif Free.
->
-> 1. Na GitHubu otevři repozitář `marty2427/WEB-Hypo`. Pokud existuje otevřený pull request
->    z větve `claude/admiring-galileo-rps00e`, ukaž mi ho a zeptej se, jestli ho mám sloučit
->    do `main`. Pokud větev `main` neexistuje, zeptej se mě, jestli ji vytvořit z větve
->    `claude/admiring-galileo-rps00e`.
-> 2. Otevři soubor `config.js` a zeptej se mě na název webu, moje jméno a telefon. Doplň je
->    a ulož (Commit changes přímo do zveřejňované větve).
-> 3. Otevři https://dash.cloudflare.com. Pokud nemám účet, proveď mě registrací.
-> 4. Jdi do Workers & Pages → Create → záložka Pages → Connect to Git. Propoj GitHub
->    a povol přístup jen k repozitáři `WEB-Hypo`.
-> 5. Nastav: Project name `web-hypo`, Production branch `main` (nebo větev, kterou jsme
->    zvolili v bodě 1), Framework preset `None`, Build command prázdný,
->    Build output directory `/`. Pak Save and Deploy.
-> 6. Počkej na dokončení nasazení, otevři adresu `*.pages.dev`, ověř, že se stránka načte
->    a kalkulačka počítá, a pošli mi odkaz.
-> 7. Zeptej se mě, jestli chci připojit vlastní doménu. Pokud ano, nastav ji v projektu
->    v Custom domains a řekni mi přesně, jaký DNS záznam mám kde přidat.
-> 8. Zeptej se mě, jestli chci, aby poptávky z formuláře chodily na e-mail přes Formspree.
->    Pokud ano, proveď mě založením formuláře na formspree.io, adresu formuláře vlož do
->    `config.js` do `formEndpoint` a ulož. Po nasazení odešli zkušební poptávku.
+```text
+Zveřejni můj web s hypoteční kalkulačkou na internetu přes Cloudflare Pages.
+Udělej všechno sám v prohlížeči od začátku do konce. Mě se ptej jen na údaje,
+které opravdu nemůžeš zjistit sám, a to nejlépe všechno najednou na začátku.
+Nic neplať, používej jen bezplatné tarify.
+
+O webu:
+- Repozitář na GitHubu: marty2427/WEB-Hypo
+- Hotový web je ve větvi: claude/admiring-galileo-rps00e
+- Je to čistě statický web (index.html, styles.css, app.js, config.js, rates.js,
+  složka assets). Nic se nesestavuje, není potřeba žádný build.
+
+Na začátku se mě zeptej (jednou zprávou) na:
+1. Název webu (zatím je tam pracovní „HypoPlán“).
+2. Moje jméno, jak se má zobrazovat na webu.
+3. Telefon, který má být na webu.
+4. E-mail, na který mají chodit poptávky z formuláře.
+5. Jestli mám vlastní doménu, kterou chci použít (a u koho je registrovaná).
+   Pokud žádnou nemám, použij jen bezplatnou adresu *.pages.dev.
+
+Postup:
+1. GitHub: v repozitáři marty2427/WEB-Hypo vytvoř hlavní větev „main“ z větve
+   claude/admiring-galileo-rps00e (pokud „main“ už existuje, slouč do ní tuto větev
+   přes pull request) a nastav „main“ jako výchozí větev repozitáře.
+2. GitHub: ve větvi main uprav soubor config.js:
+   - brand = název webu,
+   - advisorName = moje jméno,
+   - phone = telefon,
+   - formEndpoint vyplníš v kroku 4.
+   Změnu ulož (Commit changes přímo do main).
+3. Cloudflare: otevři https://dash.cloudflare.com (pokud nemám účet, založ ho
+   na Free tarifu). Jdi do Workers & Pages → Create → záložka Pages →
+   Connect to Git. Propoj GitHub a povol přístup jen k repozitáři WEB-Hypo.
+   Nastavení projektu:
+   - Project name: web-hypo (pokud je obsazený, zvol podobný)
+   - Production branch: main
+   - Framework preset: None
+   - Build command: nech prázdné
+   - Build output directory: /
+   Klikni na Save and Deploy a počkej na dokončení.
+4. Poptávky z formuláře: na https://formspree.io založ bezplatný účet a nový
+   formulář, cílový e-mail = e-mail z mé odpovědi. Adresu formuláře
+   (https://formspree.io/f/...) vlož do config.js do formEndpoint ve větvi main
+   a ulož. Cloudflare web automaticky znovu nasadí.
+5. Vlastní doména (jen pokud ji mám): v projektu na Cloudflare otevři
+   Custom domains → Set up a custom domain a přidej ji (www i bez www).
+   Pokud je doména u jiného registrátora, přihlas se k němu a nastav DNS
+   záznamy přesně podle toho, co ukáže Cloudflare (obvykle CNAME na *.pages.dev).
+6. Kontrola: otevři výslednou adresu, ověř, že se stránka načte, kalkulačka
+   počítá (zkus nový úvěr i refinancování) a vypadá dobře i v úzkém (mobilním)
+   okně. Odešli zkušební poptávku a ověř, že dorazila na můj e-mail
+   (první poptávku je ve Formspree potřeba potvrdit – potvrď ji).
+
+Pokud narazíš na přihlášení, ověřovací kód nebo potvrzovací e-mail, vyřeš to
+sám, pokud k tomu máš přístup (např. moje e-mailová schránka nebo přihlášený
+prohlížeč). Mě požádej, jen když to jinak nejde.
+
+Na konci mi pošli:
+- odkaz na hotový web,
+- co jsi kde nastavil (účty, projekt, doména),
+- kde budu v budoucnu měnit sazby (soubor rates.js v repozitáři).
+```
+
+---
+
+## Pro představu: co Cowork nastaví
+
+| Kde | Co |
+| --- | --- |
+| GitHub | větev `main` s hotovým webem, vyplněný `config.js` |
+| Cloudflare Pages | projekt `web-hypo` napojený na GitHub, bez buildu, výstup `/` |
+| Formspree | formulář, který posílá poptávky z webu na váš e-mail |
+| Doména (volitelně) | připojená v Cloudflare, HTTPS automaticky |
+
+Sazby se později mění v souboru `rates.js`. Po uložení změny do větve `main`
+je Cloudflare do minuty nasadí na web.
