@@ -114,6 +114,21 @@
   }
   ["price", "own", "balance", "value", "income"].forEach(bindMoney);
 
+  // Úprava „Potřebujete si půjčit“: cena nemovitosti zůstává, dopočítají se vlastní zdroje
+  const loanInput = $("#loan");
+  loanInput.addEventListener("input", () => {
+    const price = parseNum($("#price").value);
+    const own = Math.max(price - Math.min(parseNum(loanInput.value), price), 0);
+    $("#own").value = nf.format(own);
+    $("#own-range").value = own;
+    paintRange($("#own-range"));
+    update();
+  });
+  loanInput.addEventListener("blur", () => {
+    const price = parseNum($("#price").value);
+    loanInput.value = nf.format(Math.min(parseNum(loanInput.value), price));
+  });
+
   /* ---------- Doba splatnosti (u refinancování i ručně) ---------- */
   const yearsRange = $("#years");
   const yearsInput = $("#years-input");
@@ -254,7 +269,11 @@
     const ltv = value > 0 ? (loan / value) * 100 : 0;
 
     // LTV štítek a výše úvěru ve formuláři
-    $(isNew ? "[data-loan-new]" : "[data-loan-refi]").textContent = kc(loan);
+    if (isNew) {
+      if (document.activeElement !== loanInput) loanInput.value = nf.format(loan);
+    } else {
+      $("[data-loan-refi]").textContent = kc(loan);
+    }
     $$("[data-ltv-chip]").forEach((chip) => {
       chip.textContent = "LTV " + Math.round(ltv) + " %";
       chip.className = "chip" + (ltv > ltvLimit ? " chip--bad" : ltv > 80 ? " chip--warn" : "");

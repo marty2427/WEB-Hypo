@@ -15,9 +15,6 @@
   <header class="nav">
     <div class="container nav__inner">
       <a href="#" class="logo" aria-label="Domů">
-        <span class="logo__mark" aria-hidden="true">
-          <svg viewBox="0 0 32 32"><path d="M8 17l8-7 8 7v7h-5v-5h-6v5H8z" fill="currentColor"/></svg>
-        </span>
         <span data-brand>HypoPlán</span>
       </a>
       <nav class="nav__links" aria-label="Hlavní navigace">
@@ -132,8 +129,8 @@
               </div>
 
               <div class="loan-box">
-                <span>Potřebujete si půjčit</span>
-                <strong data-loan-new>—</strong>
+                <label for="loan">Potřebujete si půjčit</label>
+                <div class="money"><input id="loan" type="text" inputmode="numeric" value="4 000 000" /><span>Kč</span></div>
                 <span class="chip" data-ltv-chip>LTV —</span>
               </div>
             </fieldset>
@@ -160,7 +157,7 @@
               </div>
 
               <div class="loan-box">
-                <span>Výše úvěru k refinancování</span>
+                <label>Výše úvěru k refinancování</label>
                 <strong data-loan-refi>—</strong>
                 <span class="chip" data-ltv-chip>LTV —</span>
               </div>
