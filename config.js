@@ -11,5 +11,8 @@ window.HYPO_CONFIG = {
   // Volitelně: URL formulářové služby (např. Formspree), poptávka se pak odešle přímo z webu.
   formEndpoint: "https://api.web3forms.com/submit",
   // Veřejný přístupový klíč formuláře Web3Forms (určený k použití ve webu; poptávky chodí na e-mail nastavený ve Web3Forms).
-  formAccessKey: "98d4e495-56e8-4491-8682-b805cc0122c0"
+  formAccessKey: "98d4e495-56e8-4491-8682-b805cc0122c0",
+  // Kontakt správce osobních údajů na stránce Zásady ochrany osobních údajů.
+  // Rozdělený na dvě části, aby ho roboti nenašli jako celou adresu.
+  privacyEmail: ["martinsvab27", "gmail.com"]
 };

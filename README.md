@@ -20,6 +20,7 @@ jakýkoli hosting (GitHub Pages, Netlify, Vercel, Wedos…), nebo otevřít `ind
 | `scene.js` | Živá scéna v úvodu: slunce, měsíc, hvězdy, běhající srnky a zajíci |
 | `tools/kresli_scenu.py` | Vykreslí krajinu (dům, garáž, bazén, louka) do `index.html` |
 | `assets/fonts/` | Písmo Inter uložené přímo na webu (licence OFL), bez načítání od Googlu |
+| `zasady-ochrany-osobnich-udaju.html`, `legal.js` | Zásady ochrany osobních údajů (GDPR), kontakty se doplní z `config.js` |
 | `_headers` | Bezpečnostní hlavičky pro Cloudflare Pages (CSP, ochrana proti vložení do cizí stránky…) |
 | `_redirects` | Interní soubory repozitáře (README, návod, tools) přesměruje na úvod |
 

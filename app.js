@@ -43,7 +43,6 @@
   // Návštěvník vidí vždy dnešní datum.
   const updatedText = new Date().toLocaleDateString("cs-CZ", { day: "numeric", month: "long", year: "numeric" });
   $$("[data-rates-updated]").forEach((el) => (el.textContent = updatedText));
-  $("[data-rates-source]").textContent = RATES.sourceNote;
   if (CONFIG.brand) $$("[data-brand]").forEach((el) => (el.textContent = CONFIG.brand));
   $("[data-advisor]").textContent = CONFIG.advisorName || "";
   const phoneEl = $("[data-phone]");
