@@ -17,7 +17,8 @@ jakýkoli hosting (GitHub Pages, Netlify, Vercel, Wedos…), nebo otevřít `ind
 | `app.js` | Výpočet splátky, LTV, srovnání při refinancování, formulář |
 | `rates.js` | **Aktuální sazby** – jediné místo, kde se mění |
 | `config.js` | Jméno, telefon, e-mail a kam chodí poptávky |
-| `assets/domek.svg` | Ilustrace domu se zahradou v úvodu stránky |
+| `scene.js` | Živá scéna v úvodu: slunce, měsíc, hvězdy, běhající srnky a zajíci |
+| `tools/kresli_scenu.py` | Vykreslí krajinu (dům, garáž, bazén, louka) do `index.html` |
 
 ## Aktualizace sazeb
 
