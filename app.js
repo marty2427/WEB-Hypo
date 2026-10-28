@@ -36,6 +36,8 @@
     fixation: RATES.defaultFixation || RATES.fixations[0].years,
     purpose: "Koupě bytu",
     years: 30,
+    // doba splatnosti si pamatujeme zvlášť pro každý typ úvěru
+    yearsByType: { new: 30, refi: 30, consumer: 5 },
     summary: ""
   };
 
@@ -57,6 +59,19 @@
   const heroFx = fixationFor(5).ltv80;
   $("[data-hero-rate]").textContent = pct(heroFx.avg);
   $("[data-hero-pay]").textContent = "cca " + kc(roundTo(annuity(4e6, heroFx.avg, 30), 100)) + " / měsíc";
+
+  // Sazby spotřebitelských úvěrů v sekci Sazby
+  const CONS = RATES.consumer;
+  $("[data-crate=min]").textContent = "od " + pct(CONS.min);
+  $("[data-crate=avg]").textContent = pct(CONS.avg);
+  $("[data-crate=max]").textContent = "kolem " + pct(CONS.max);
+
+  // Meze doby splatnosti a popisky stupnice podle typu úvěru
+  const YEARS = {
+    new: { min: 5, max: 30, scale: [5, 15, 30] },
+    refi: { min: 1, max: 30, scale: [1, 15, 30] },
+    consumer: { min: 1, max: CONS.maxYears || 10, scale: [1, 5, CONS.maxYears || 10] }
+  };
 
   /* ---------- Tabulka sazeb ---------- */
   function renderRatesTable() {
@@ -111,7 +126,7 @@
       paintRange(range);
     }
   }
-  ["price", "own", "balance", "value", "income"].forEach(bindMoney);
+  ["price", "own", "balance", "value", "income", "cloan"].forEach(bindMoney);
 
   // Úprava „Potřebujete si půjčit“: cena nemovitosti zůstává, dopočítají se vlastní zdroje
   const loanInput = $("#loan");
@@ -230,28 +245,122 @@
 
   $$('input[name="type"]').forEach((r) =>
     r.addEventListener("change", () => {
+      state.yearsByType[state.type] = state.years;
       state.type = r.value;
+      state.years = state.yearsByType[state.type];
       update();
     })
   );
 
+  /* ---------- Srovnání dvou úvěrů ---------- */
+  const cmp = $("#compare");
+  const cmpIn = (k, f) => $(`#c${k}-${f}`);
+  let cmpTouched = false;
+  const fmtRate = (n) => n.toLocaleString("cs-CZ", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  function prefillCompare() {
+    if (cmpTouched) return;
+    const amount = nf.format(parseNum($("#cloan").value));
+    ["a", "b"].forEach((k) => {
+      cmpIn(k, "amount").value = amount;
+      cmpIn(k, "years").value = state.years;
+    });
+    cmpIn("a", "rate").value = fmtRate(CONS.avg);
+    cmpIn("b", "rate").value = fmtRate(CONS.min);
+  }
+
+  function signed(n) {
+    const r = Math.round(n);
+    if (r === 0) return "0 Kč";
+    return (r > 0 ? "+" : "−") + kc(Math.abs(r));
+  }
+
+  function renderCompare() {
+    const read = (k) => {
+      const amount = parseNum(cmpIn(k, "amount").value);
+      const rate = Math.min(parseNum(cmpIn(k, "rate").value), 50);
+      const yrs = Math.min(Math.max(Math.round(parseNum(cmpIn(k, "years").value)), 1), 30);
+      const pay = annuity(amount, rate, yrs);
+      const total = pay * yrs * 12;
+      return { ok: amount > 0, pay, total, over: Math.max(total - amount, 0) };
+    };
+    const a = read("a");
+    const b = read("b");
+    const set = (key, val) => ($(`[data-cmp="${key}"]`).textContent = val);
+    const ok = a.ok && b.ok;
+    for (const [row, f] of [["pay", "pay"], ["total", "total"], ["over", "over"]]) {
+      set(`${row}-a`, a.ok ? kc(a[f]) : "—");
+      set(`${row}-b`, b.ok ? kc(b[f]) : "—");
+      set(`${row}-d`, ok ? signed(b[f] - a[f]) : "—");
+      const cell = $(`[data-cmp="${row}-d"]`);
+      cell.classList.toggle("is-better", ok && b[f] - a[f] < -0.5);
+      cell.classList.toggle("is-worse", ok && b[f] - a[f] > 0.5);
+    }
+
+    const verdict = $('[data-cmp="verdict"]');
+    if (!ok) {
+      verdict.textContent = "Zadejte výši obou úvěrů.";
+      return;
+    }
+    const dp = Math.round(b.pay - a.pay);
+    const dov = Math.round(b.over - a.over);
+    if (Math.abs(dov) < 1 && Math.abs(dp) < 1) {
+      verdict.textContent = "Oba úvěry vycházejí stejně.";
+      return;
+    }
+    const [win, lose, payDiff] = dov <= 0 ? ["B", "A", -dp] : ["A", "B", dp];
+    const saved = kc(Math.abs(dov));
+    verdict.innerHTML =
+      payDiff >= 0
+        ? `<strong>Výhodnější je úvěr ${win}:</strong> splátka je o ${kc(payDiff)} nižší a celkem přeplatíte o <strong>${saved}</strong> méně než u úvěru ${lose}.`
+        : `<strong>Celkově výhodnější je úvěr ${win}:</strong> měsíční splátka je sice o ${kc(-payDiff)} vyšší, ale celkem přeplatíte o <strong>${saved}</strong> méně než u úvěru ${lose}.`;
+  }
+
+  cmp.addEventListener("toggle", () => {
+    if (cmp.open) {
+      prefillCompare();
+      renderCompare();
+    }
+  });
+  $$(".cmp__grid input").forEach((input) => {
+    input.addEventListener("input", () => {
+      cmpTouched = true;
+      renderCompare();
+    });
+    input.addEventListener("blur", () => {
+      if (input.value.trim() === "") return;
+      const n = parseNum(input.value);
+      if (input.id.endsWith("rate")) input.value = fmtRate(Math.min(n, 50));
+      else if (input.id.endsWith("years")) input.value = Math.min(Math.max(Math.round(n), 1), 30);
+      else input.value = nf.format(n);
+      renderCompare();
+    });
+  });
+
   /* ---------- Výpočet ---------- */
   function update() {
     const isNew = state.type === "new";
+    const isConsumer = state.type === "consumer";
     $$("[data-mode]").forEach((el) => (el.hidden = el.dataset.mode !== state.type));
-    $("[data-years-label]").textContent = isNew ? "Doba splatnosti" : "Zbývající doba splácení";
-    $$("[data-show]").forEach((el) => (el.hidden = el.dataset.show !== state.type));
-    // U refinancování může zbývat i méně než 5 let
-    yearsRange.min = isNew ? 5 : 1;
-    $(".scale span").textContent = years(+yearsRange.min);
-    if (isNew && state.years < 5) state.years = 5;
+    $("[data-years-label]").textContent = state.type === "refi" ? "Zbývající doba splácení" : "Doba splatnosti";
+    $$("[data-show]").forEach((el) => (el.hidden = !el.dataset.show.split(" ").includes(state.type)));
+    $$("[data-hide]").forEach((el) => (el.hidden = el.dataset.hide.split(" ").includes(state.type)));
+    // Meze splatnosti: hypotéka 5–30 let, refinancování 1–30, spotřebitelský úvěr 1–10
+    const lim = YEARS[state.type];
+    yearsRange.min = lim.min;
+    yearsRange.max = lim.max;
+    $$("[data-scale] span").forEach((el, i) => (el.textContent = years(lim.scale[i])));
+    state.years = Math.min(Math.max(state.years, lim.min), lim.max);
     yearsRange.value = state.years;
     yearsInput.value = state.years;
     paintRange(yearsRange);
     $$("[data-fix]").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.fix === state.fixation)));
 
     let loan, value;
-    if (isNew) {
+    if (isConsumer) {
+      value = 0;
+      loan = parseNum($("#cloan").value);
+    } else if (isNew) {
       value = parseNum($("#price").value);
       loan = Math.max(value - parseNum($("#own").value), 0);
     } else {
@@ -270,7 +379,7 @@
     // LTV štítek a výše úvěru ve formuláři
     if (isNew) {
       if (document.activeElement !== loanInput) loanInput.value = nf.format(loan);
-    } else {
+    } else if (!isConsumer) {
       $("[data-loan-refi]").textContent = kc(loan);
     }
     $$("[data-ltv-chip]").forEach((chip) => {
@@ -279,7 +388,7 @@
     });
 
     const fx = fixationFor(state.fixation);
-    const band = bandFor(fx, ltv);
+    const band = isConsumer ? CONS : bandFor(fx, ltv);
     const pay = {
       min: annuity(loan, band.min, yrs),
       avg: annuity(loan, band.avg, yrs),
@@ -300,7 +409,9 @@
 
     $("[data-r-loan]").textContent = kc(loan);
     $("[data-r-rate]").textContent = pct(band.min) + " – " + pct(band.max);
-    $("[data-r-term]").textContent = years(state.fixation) + " / " + years(yrs);
+    $("[data-r-term-label]").textContent = isConsumer ? "Splatnost" : "Fixace / splatnost";
+    $("[data-r-term]").textContent = isConsumer ? years(yrs) : years(state.fixation) + " / " + years(yrs);
+    $("[data-to-contact]").textContent = isConsumer ? "Chci nejlepší nabídku úvěru" : "Chci přesnou nabídku od bank";
     $("[data-r-ltv]").textContent = value > 0 ? Math.round(ltv) + " %" : "—";
 
     // Poměr splátky k příjmu
@@ -316,7 +427,7 @@
 
     // Upozornění na LTV
     const alert = $("[data-alert]");
-    if (loan > 0 && value > 0 && ltv > ltvLimit) {
+    if (!isConsumer && loan > 0 && value > 0 && ltv > ltvLimit) {
       const missing = roundTo(loan - (value * ltvLimit) / 100, 1000);
       alert.hidden = false;
       alert.innerHTML = isNew
@@ -328,14 +439,22 @@
 
     renderRatesTable();
 
+    if (isConsumer) {
+      prefillCompare();
+      if (cmp.open) renderCompare();
+    }
+
     // Shrnutí pro poptávku
-    const lines = isNew
-      ? [`Nový úvěr – ${state.purpose.toLowerCase()}`, `cena nemovitosti ${kc(value)}`, `úvěr ${kc(loan)} (LTV ${Math.round(ltv)} %)`]
-      : [`Refinancování`, `zůstatek ${kc(loan)}`, `hodnota nemovitosti ${kc(value)} (LTV ${Math.round(ltv)} %)`];
-    lines.push(`splatnost ${years(yrs)}`, `fixace ${years(state.fixation)}`);
+    const lines = isConsumer
+      ? [`Spotřebitelský úvěr`, `výše ${kc(loan)}`]
+      : isNew
+        ? [`Nový úvěr – ${state.purpose.toLowerCase()}`, `cena nemovitosti ${kc(value)}`, `úvěr ${kc(loan)} (LTV ${Math.round(ltv)} %)`]
+        : [`Refinancování`, `zůstatek ${kc(loan)}`, `hodnota nemovitosti ${kc(value)} (LTV ${Math.round(ltv)} %)`];
+    lines.push(`splatnost ${years(yrs)}`);
+    if (!isConsumer) lines.push(`fixace ${years(state.fixation)}`);
     if (loan > 0) lines.push(`orientační splátka ${nf.format(roundTo(pay.min, 100))} – ${kc(roundTo(pay.max, 100))}`);
     if (income > 0) lines.push(`příjem domácnosti ${kc(income)}`);
-    if (young) lines.push("žadatel do 36 let");
+    if (young && !isConsumer) lines.push("žadatel do 36 let");
     state.summary = lines.join(", ");
   }
 
@@ -399,7 +518,7 @@
       zprava: $("#l-msg").value.trim(),
       vypocet: state.summary
     };
-    if (CONFIG.formAccessKey) Object.assign(data, { access_key: CONFIG.formAccessKey, subject: "Poptávka hypotéky – " + data.jmeno, from_name: CONFIG.brand || "Web" });
+    if (CONFIG.formAccessKey) Object.assign(data, { access_key: CONFIG.formAccessKey, subject: (state.type === "consumer" ? "Poptávka úvěru – " : "Poptávka hypotéky – ") + data.jmeno, from_name: CONFIG.brand || "Web" });
 
     submitBtn.disabled = true;
     submitBtn.textContent = "Odesílám…";

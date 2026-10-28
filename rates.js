@@ -11,6 +11,11 @@
  * nad 80 % LTV: 3 roky 5,84 %, 5 let 6,15 %, 10 let 6,61 %.
  * Odhady: fixace 7 let (průměr 5 a 10 let) a hodnoty min/max (průměr ∓ 0,55 p. b.).
  * Sazby každý týden kontroluje naplánovaná úloha „Týdenní aktualizace sazeb hypoték“.
+ *
+ * Spotřebitelské úvěry (consumer): avg = průměrná sazba nových úvěrů na spotřebu dle ČNB
+ * (srpen 2026: 7,99 %), min = nejnižší běžná nabídka velkých bank (Česká spořitelna od 4,39 %,
+ * Air Bank od 4,4 %, Komerční banka od 4,69 %; říjen 2026), max = odhad vyšších nabídek
+ * (avg + (avg − min)). Splatnost až 10 let.
  */
 window.HYPO_RATES = {
   // Datum poslední úpravy sazeb (interní údaj). Web návštěvníkům ukazuje vždy dnešní datum.
@@ -18,6 +23,7 @@ window.HYPO_RATES = {
   sourceNote:
     "Orientační rozpětí vychází z průměrných nabídkových sazeb českých bank (Swiss Life Hypoindex, říjen 2026). Konkrétní sazba závisí na bance, vaší bonitě a poměru úvěru k hodnotě nemovitosti.",
   defaultFixation: 5,
+  consumer: { updated: "2026-10-28", min: 4.39, avg: 7.99, max: 11.59, maxYears: 10 },
   fixations: [
     { years: 3,  ltv80: { min: 4.98, avg: 5.53, max: 6.08 }, ltv90: { min: 5.29, avg: 5.84, max: 6.39 } },
     { years: 5,  ltv80: { min: 5.29, avg: 5.84, max: 6.39 }, ltv90: { min: 5.60, avg: 6.15, max: 6.70 } },

@@ -26,7 +26,7 @@ jakýkoli hosting (GitHub Pages, Netlify, Vercel, Wedos…), nebo otevřít `ind
 
 ## Aktualizace sazeb
 
-Upravte `rates.js`: pro každou fixaci rozpětí `min` / `avg` / `max`
+Upravte `rates.js`: blok `consumer` (spotřebitelské úvěry: min / avg / max a maximální splatnost) a pro každou fixaci hypotéky rozpětí `min` / `avg` / `max`
 zvlášť pro úvěry do 80 % LTV (`ltv80`) a nad 80 % LTV (`ltv90`).
 
 Výchozí hodnoty vycházejí z veřejných průměrných nabídkových sazeb bank (Swiss Life

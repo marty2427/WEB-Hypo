@@ -305,10 +305,10 @@
 <g class="radar">
 <path d="M1058 440 L1060 410" stroke="#475569" stroke-width="3.5" stroke-linecap="round"/>
 <path d="M1049 440 H1068" stroke="#475569" stroke-width="3.5" stroke-linecap="round"/>
-<ellipse cx="1066" cy="407" rx="19" ry="8" transform="rotate(-35 1066 407)" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
-<ellipse cx="1066" cy="407" rx="11" ry="4.5" transform="rotate(-35 1066 407)" fill="#e2e8f0"/>
-<path d="M1066 407 L1081 392" stroke="#475569" stroke-width="2.4" stroke-linecap="round"/>
-<circle cx="1081" cy="392" r="3" fill="#334155"/>
+<ellipse cx="1066" cy="407" rx="19" ry="8" transform="rotate(35 1066 407)" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
+<ellipse cx="1066" cy="407" rx="11" ry="4.5" transform="rotate(35 1066 407)" fill="#e2e8f0"/>
+<path d="M1066 407 L1051 392" stroke="#475569" stroke-width="2.4" stroke-linecap="round"/>
+<circle cx="1051" cy="392" r="3" fill="#334155"/>
 </g>
 </g>
 <g class="pool">
@@ -345,9 +345,9 @@
 </svg>
 <svg class="hero__scene hero__beacon" viewBox="0 0 2400 720" preserveAspectRatio="xMaxYMax slice" aria-hidden="true" focusable="false">
 <g transform="translate(1380 608) scale(1.5) translate(-880 -608)">
-<g fill="none" stroke="#0d9488" stroke-width="3.4" stroke-linecap="round"><path class="beacon__wave beacon__wave--1" d="M1086.1 381.1 A12 12 0 0 1 1093.0 392.0"/><path class="beacon__wave beacon__wave--2" d="M1089.9 373.0 A21 21 0 0 1 1102.0 392.0"/><path class="beacon__wave beacon__wave--3" d="M1093.7 364.8 A30 30 0 0 1 1111.0 392.0"/></g>
-<circle class="beacon__glow" cx="1081" cy="392" r="10" fill="#f87171"/>
-<circle class="beacon__led" cx="1081" cy="392" r="3.6" fill="#ef4444"/>
+<g fill="none" stroke="#0d9488" stroke-width="3.4" stroke-linecap="round"><path class="beacon__wave beacon__wave--1" d="M1039.0 392.0 A12 12 0 0 1 1045.9 381.1"/><path class="beacon__wave beacon__wave--2" d="M1029.0 392.0 A22 22 0 0 1 1041.7 372.1"/><path class="beacon__wave beacon__wave--3" d="M1019.0 392.0 A32 32 0 0 1 1037.5 363.0"/><path class="beacon__wave beacon__wave--4" d="M1009.0 392.0 A42 42 0 0 1 1018.8 365.0"/></g>
+<circle class="beacon__glow" cx="1051" cy="392" r="10" fill="#f87171"/>
+<circle class="beacon__led" cx="1051" cy="392" r="3.6" fill="#ef4444"/>
 </g>
 </svg>
 <!--/SCENA-->
@@ -355,7 +355,7 @@
         <div class="hero__text">
           <p class="eyebrow">Hypoteční kalkulačka</p>
           <h1>Kolik budete měsíčně splácet za&nbsp;hypotéku?</h1>
-          <p class="lead">Zadejte pár údajů a hned uvidíte orientační splátku podle aktuálních sazeb bank. Nový úvěr i&nbsp;refinancování&nbsp;– zdarma, bez registrace.</p>
+          <p class="lead">Zadejte pár údajů a hned uvidíte orientační splátku podle aktuálních sazeb bank. Nový úvěr, refinancování i&nbsp;spotřebitelský úvěr&nbsp;– zdarma, bez registrace.</p>
           <div class="hero__cta">
             <a href="#kalkulacka" class="btn">Spočítat splátku</a>
             <a href="#kontakt" class="btn btn--outline">Chci poradit</a>
@@ -406,6 +406,16 @@
                     </span>
                     <span class="choice__title">Refinancování</span>
                     <span class="choice__desc">Končí mi fixace nebo chci lepší sazbu</span>
+                  </span>
+                </label>
+                <label class="choice__item">
+                  <input type="radio" name="type" value="consumer" />
+                  <span class="choice__body">
+                    <span class="choice__icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg>
+                    </span>
+                    <span class="choice__title">Spotřebitelský úvěr</span>
+                    <span class="choice__desc">Půjčka na cokoliv, až na 10 let</span>
                   </span>
                 </label>
               </div>
@@ -484,6 +494,20 @@
               </div>
             </fieldset>
 
+            <!-- Krok 2: Spotřebitelský úvěr -->
+            <fieldset class="step" data-mode="consumer" hidden>
+              <legend><span class="step__num">2</span>Výše úvěru</legend>
+
+              <div class="field">
+                <div class="field__row">
+                  <label for="cloan">Kolik si chcete půjčit</label>
+                  <div class="money"><input id="cloan" type="text" inputmode="numeric" value="300 000" /><span>Kč</span></div>
+                </div>
+                <input type="range" id="cloan-range" min="20000" max="2500000" step="10000" value="300000" aria-label="Výše spotřebitelského úvěru" />
+                <p class="hint">Bez zástavy nemovitosti. Sazba se nemění po celou dobu splácení.</p>
+              </div>
+            </fieldset>
+
             <!-- Krok 3 -->
             <fieldset class="step">
               <legend><span class="step__num">3</span>Splácení</legend>
@@ -492,19 +516,19 @@
                 <div class="field__row">
                   <label for="years" data-years-label>Doba splatnosti</label>
                   <output class="pill" id="years-out" for="years" data-show="new">30 let</output>
-                  <div class="money money--years" data-show="refi" hidden><input id="years-input" type="text" inputmode="numeric" value="30" aria-label="Zbývající doba splácení v letech" /><span data-years-unit>let</span></div>
+                  <div class="money money--years" data-show="refi consumer" hidden><input id="years-input" type="text" inputmode="numeric" value="30" aria-label="Zbývající doba splácení v letech" /><span data-years-unit>let</span></div>
                 </div>
                 <input type="range" id="years" min="5" max="30" step="1" value="30" aria-label="Doba splatnosti v letech" />
-                <div class="scale"><span>5 let</span><span>15 let</span><span>30 let</span></div>
+                <div class="scale" data-scale><span>5 let</span><span>15 let</span><span>30 let</span></div>
               </div>
 
-              <div class="field">
+              <div class="field" data-hide="consumer">
                 <span class="label">Délka fixace sazby</span>
                 <div class="segmented" id="fixations" role="group" aria-label="Délka fixace"></div>
                 <p class="hint">Po dobu fixace se sazba ani splátka nemění.</p>
               </div>
 
-              <div class="field">
+              <div class="field" data-hide="consumer">
                 <label class="check">
                   <input type="checkbox" id="young" />
                   <span>Alespoň jednomu žadateli je méně než 36 let <small>(banka může půjčit až 90 % hodnoty)</small></span>
@@ -519,6 +543,45 @@
                 <p class="hint">Pomůže odhadnout, zda splátku banka pravděpodobně schválí.</p>
               </div>
             </fieldset>
+
+            <!-- Srovnání dvou úvěrů -->
+            <div class="step cmp-step" data-mode="consumer" hidden>
+              <details class="cmp" id="compare">
+                <summary class="cmp__summary">
+                  <span class="cmp__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4v16M17 4v16M3 8h8M13 16h8"/></svg></span>
+                  <span><span class="cmp__heading">Srovnání úvěrů</span><span class="cmp__sub">Srovnat dva úvěry vedle sebe</span></span>
+                  <svg class="select__chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
+                </summary>
+                <div class="cmp__body">
+                  <p class="hint">Zadejte dvě nabídky – například od své banky a od konkurence. Úvěr A je předvyplněný podle kalkulačky.</p>
+                  <div class="cmp__grid">
+                  <div class="cmp__card cmp__card--a">
+                    <p class="cmp__title">Úvěr A</p>
+                    <div class="cmp__row"><label for="ca-amount">Výše úvěru</label><div class="money"><input id="ca-amount" type="text" inputmode="numeric" value="300 000" /><span>Kč</span></div></div>
+                    <div class="cmp__row"><label for="ca-rate">Úroková sazba</label><div class="money"><input id="ca-rate" type="text" inputmode="decimal" value="7,99" /><span>%</span></div></div>
+                    <div class="cmp__row"><label for="ca-years">Doba splatnosti</label><div class="money money--years"><input id="ca-years" type="text" inputmode="numeric" value="5" /><span>let</span></div></div>
+                  </div>
+                  <div class="cmp__card cmp__card--b">
+                    <p class="cmp__title">Úvěr B</p>
+                    <div class="cmp__row"><label for="cb-amount">Výše úvěru</label><div class="money"><input id="cb-amount" type="text" inputmode="numeric" value="300 000" /><span>Kč</span></div></div>
+                    <div class="cmp__row"><label for="cb-rate">Úroková sazba</label><div class="money"><input id="cb-rate" type="text" inputmode="decimal" value="7,99" /><span>%</span></div></div>
+                    <div class="cmp__row"><label for="cb-years">Doba splatnosti</label><div class="money money--years"><input id="cb-years" type="text" inputmode="numeric" value="5" /><span>let</span></div></div>
+                  </div>
+                  </div>
+                  <div class="cmp__table-wrap">
+                    <table class="cmp__table">
+                      <thead><tr><th></th><th>Úvěr A</th><th>Úvěr B</th><th>Rozdíl B − A</th></tr></thead>
+                      <tbody>
+                        <tr><th scope="row">Měsíční splátka</th><td data-cmp="pay-a">—</td><td data-cmp="pay-b">—</td><td data-cmp="pay-d">—</td></tr>
+                        <tr><th scope="row">Celkem zaplatíte</th><td data-cmp="total-a">—</td><td data-cmp="total-b">—</td><td data-cmp="total-d">—</td></tr>
+                        <tr class="cmp__over"><th scope="row">Přeplatíte (úroky)</th><td data-cmp="over-a">—</td><td data-cmp="over-b">—</td><td data-cmp="over-d">—</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p class="cmp__verdict" data-cmp="verdict"></p>
+                </div>
+              </details>
+            </div>
           </form>
 
           <!-- VÝSLEDEK -->
@@ -538,8 +601,8 @@
               <dl class="result__list">
                 <div><dt>Výše úvěru</dt><dd data-r-loan>—</dd></div>
                 <div><dt>Úroková sazba</dt><dd data-r-rate>—</dd></div>
-                <div><dt>Fixace / splatnost</dt><dd data-r-term>—</dd></div>
-                <div><dt>Poměr úvěru k hodnotě (LTV)</dt><dd data-r-ltv>—</dd></div>
+                <div><dt data-r-term-label>Fixace / splatnost</dt><dd data-r-term>—</dd></div>
+                <div data-hide="consumer"><dt>Poměr úvěru k hodnotě (LTV)</dt><dd data-r-ltv>—</dd></div>
                 <div data-dsti-row hidden><dt>Splátka z příjmu</dt><dd data-r-dsti>—</dd></div>
               </dl>
 
@@ -570,6 +633,14 @@
             <tbody id="rates-body"></tbody>
           </table>
         </div>
+
+        <h3 class="rates-sub">Spotřebitelské úvěry</h3>
+        <div class="crates">
+          <div class="card crates__tile"><span>Nejlepší nabídky bank</span><strong data-crate="min">—</strong></div>
+          <div class="card crates__tile crates__tile--main"><span>Průměr nových úvěrů</span><strong data-crate="avg">—</strong></div>
+          <div class="card crates__tile"><span>Vyšší nabídky</span><strong data-crate="max">—</strong></div>
+        </div>
+        <p class="hint crates__note">Úroková sazba p. a., pevná po celou dobu splácení. Konkrétní nabídka závisí na výši úvěru a vaší bonitě.</p>
       </div>
     </section>
 

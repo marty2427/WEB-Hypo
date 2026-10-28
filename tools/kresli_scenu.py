@@ -149,10 +149,10 @@ def scene():
     A('''<g class="radar">
 <path d="M1058 440 L1060 410" stroke="#475569" stroke-width="3.5" stroke-linecap="round"/>
 <path d="M1049 440 H1068" stroke="#475569" stroke-width="3.5" stroke-linecap="round"/>
-<ellipse cx="1066" cy="407" rx="19" ry="8" transform="rotate(-35 1066 407)" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
-<ellipse cx="1066" cy="407" rx="11" ry="4.5" transform="rotate(-35 1066 407)" fill="#e2e8f0"/>
-<path d="M1066 407 L1081 392" stroke="#475569" stroke-width="2.4" stroke-linecap="round"/>
-<circle cx="1081" cy="392" r="3" fill="#334155"/>
+<ellipse cx="1066" cy="407" rx="19" ry="8" transform="rotate(35 1066 407)" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
+<ellipse cx="1066" cy="407" rx="11" ry="4.5" transform="rotate(35 1066 407)" fill="#e2e8f0"/>
+<path d="M1066 407 L1051 392" stroke="#475569" stroke-width="2.4" stroke-linecap="round"/>
+<circle cx="1051" cy="392" r="3" fill="#334155"/>
 </g>''')
     A('</g>')
 
@@ -198,10 +198,10 @@ def lights():
 
 def beacon():
     """Blikající světlo antény a vysílané vlny – svítí ve dne i v noci (bez stmavení)."""
-    cx, cy = 1081, 392
+    cx, cy = 1051, 392
     waves = []
-    for i, r in enumerate((12, 21, 30)):
-        a0, a1 = math.radians(-65), math.radians(0)
+    for i, r in enumerate((12, 22, 32, 42)):
+        a0, a1 = math.radians(-180), math.radians(-140 if r > 35 else -115)
         x0, y0 = cx + r * math.cos(a0), cy + r * math.sin(a0)
         x1, y1 = cx + r * math.cos(a1), cy + r * math.sin(a1)
         waves.append(f'<path class="beacon__wave beacon__wave--{i+1}" d="M{x0:.1f} {y0:.1f} A{r} {r} 0 0 1 {x1:.1f} {y1:.1f}"/>')
