@@ -2,7 +2,7 @@
  * Základní nastavení webu – jméno, kontakty a kam se posílají poptávky.
  */
 window.HYPO_CONFIG = {
-  brand: "HypoPlán",
+  brand: "HypoRadar",
   advisorName: "Ing. Martin Šváb – Majetkový a finanční konzultant",
   phone: "+420 777 55 25 30",
   // Záložní e-mail pro odeslání přes e-mailového klienta návštěvníka – použije se jen bez formEndpoint.

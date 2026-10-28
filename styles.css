@@ -83,28 +83,51 @@ a { color: var(--brand); }
 }
 .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
 .logo { display: flex; align-items: center; gap: .6em; color: #fff; text-decoration: none; font-weight: 800; font-size: 1.15rem; }
+.nav__brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.nav__tagline { color: rgba(255,255,255,.78); font-size: .92rem; font-weight: 500; padding-left: 14px; border-left: 1px solid rgba(255,255,255,.25); white-space: nowrap; }
+.lbl-short { display: none; }
 .nav__links { display: flex; align-items: center; gap: 1.6rem; }
 .nav__links a:not(.btn) { color: rgba(255,255,255,.8); text-decoration: none; font-weight: 500; font-size: .95rem; }
 .nav__links a:not(.btn):hover { color: #fff; }
-@media (max-width: 760px) { .nav__links a:not(.btn) { display: none; } }
+@media (max-width: 1080px) { .nav__links a:not(.btn) { display: none; } }
+@media (max-width: 640px) {
+  .nav__brand { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .nav__tagline { border: 0; padding: 0; font-size: .74rem; white-space: normal; max-width: 200px; line-height: 1.25; text-wrap: balance; }
+  .lbl-long { display: none; }
+  .lbl-short { display: inline; }
+}
 
 /* ---------- Hero ---------- */
 .hero {
   color: var(--ink);
   /* barvy oblohy mění scene.js podle denní doby */
   background: linear-gradient(180deg, var(--sky-top, #e6f2fb) 0%, var(--sky-bottom, #ffffff) 70%);
-  padding: clamp(40px, 6vw, 64px) 0 max(130px, calc(18.4vw - 90px));
+  padding: clamp(40px, 6vw, 64px) 0 max(130px, calc(20vw - 90px));
   position: relative;
   overflow: hidden;
   isolation: isolate;
 }
 .hero__scene {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: -1;
-  width: 100%; height: max(200px, 18.4vw);
+  width: 100%; height: max(200px, 20vw);
   pointer-events: none; user-select: none;
   filter: brightness(calc(1 - .55 * var(--night, 0))) saturate(calc(1 - .35 * var(--night, 0)));
 }
 .hero__lights { filter: none; opacity: var(--night, 0); }
+/* Radar na střeše: blikající světlo a vysílané vlny (bez nočního stmavení) */
+.hero__beacon { filter: none; }
+.beacon__led { animation: beacon-led 1.8s ease-in-out infinite; }
+.beacon__glow { opacity: 0; animation: beacon-glow 1.8s ease-out infinite; }
+.beacon__wave { opacity: 0; animation: beacon-wave 1.8s ease-out infinite; }
+.beacon__wave--2 { animation-delay: .2s; }
+.beacon__wave--3 { animation-delay: .4s; }
+@keyframes beacon-led { 0%, 14% { opacity: 1; } 22%, 100% { opacity: .25; } }
+@keyframes beacon-glow { 0% { opacity: .6; } 30%, 100% { opacity: 0; } }
+@keyframes beacon-wave { 0% { opacity: 0; } 15% { opacity: .95; } 55%, 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .beacon__led, .beacon__glow, .beacon__wave { animation: none; }
+  .beacon__wave { opacity: .6; }
+}
 .hero__scene .shimmer { animation: shimmer 4s ease-in-out infinite; }
 .hero__scene .shimmer--2 { animation-delay: -2s; }
 @keyframes shimmer { 0%, 100% { opacity: .15; transform: translateX(-6px); } 50% { opacity: .55; transform: translateX(6px); } }

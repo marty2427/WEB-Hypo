@@ -1,4 +1,4 @@
-# Hypoteční kalkulačka (WEB-Hypo)
+# HypoRadar – hypoteční kalkulačka (WEB-Hypo)
 
 Jednoduchý moderní web pro klienty a zájemce o hypotéku. Návštěvník zadá, zda chce
 **nový úvěr** nebo **refinancování**, výši úvěru / hodnotu nemovitosti, dobu splatnosti

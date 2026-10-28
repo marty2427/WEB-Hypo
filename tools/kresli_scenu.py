@@ -145,6 +145,15 @@ def scene():
     for _ in range(18):
         x = random.uniform(990, 1110)
         A(f'<circle cx="{x:.0f}" cy="{random.uniform(610, 626):.0f}" r="{random.uniform(1.6,2.6):.1f}" fill="{random.choice(["#f59e0b","#ec4899","#f87171","#facc15"])}"/>')
+    # satelitní anténa (radar) na střeše
+    A('''<g class="radar">
+<path d="M1058 440 L1060 410" stroke="#475569" stroke-width="3.5" stroke-linecap="round"/>
+<path d="M1049 440 H1068" stroke="#475569" stroke-width="3.5" stroke-linecap="round"/>
+<ellipse cx="1066" cy="407" rx="19" ry="8" transform="rotate(-35 1066 407)" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
+<ellipse cx="1066" cy="407" rx="11" ry="4.5" transform="rotate(-35 1066 407)" fill="#e2e8f0"/>
+<path d="M1066 407 L1081 392" stroke="#475569" stroke-width="2.4" stroke-linecap="round"/>
+<circle cx="1081" cy="392" r="3" fill="#334155"/>
+</g>''')
     A('</g>')
 
     # bazén
@@ -187,9 +196,26 @@ def lights():
 </svg>'''
 
 
+def beacon():
+    """Blikající světlo antény a vysílané vlny – svítí ve dne i v noci (bez stmavení)."""
+    cx, cy = 1081, 392
+    waves = []
+    for i, r in enumerate((12, 21, 30)):
+        a0, a1 = math.radians(-65), math.radians(0)
+        x0, y0 = cx + r * math.cos(a0), cy + r * math.sin(a0)
+        x1, y1 = cx + r * math.cos(a1), cy + r * math.sin(a1)
+        waves.append(f'<path class="beacon__wave beacon__wave--{i+1}" d="M{x0:.1f} {y0:.1f} A{r} {r} 0 0 1 {x1:.1f} {y1:.1f}"/>')
+    return (f'<svg class="hero__scene hero__beacon" viewBox="0 0 {W} {H}" preserveAspectRatio="xMaxYMax slice" aria-hidden="true" focusable="false">\n'
+            f'<g transform="{HOUSE}">\n'
+            f'<g fill="none" stroke="#0d9488" stroke-width="3.4" stroke-linecap="round">{"".join(waves)}</g>\n'
+            f'<circle class="beacon__glow" cx="{cx}" cy="{cy}" r="10" fill="#f87171"/>\n'
+            f'<circle class="beacon__led" cx="{cx}" cy="{cy}" r="3.6" fill="#ef4444"/>\n'
+            '</g>\n</svg>')
+
+
 html_path = Path(__file__).resolve().parent.parent / "index.html"
 html = html_path.read_text()
-block = "<!--SCENA-->\n" + scene() + "\n" + lights() + "\n<!--/SCENA-->"
+block = "<!--SCENA-->\n" + scene() + "\n" + lights() + "\n" + beacon() + "\n<!--/SCENA-->"
 html, n = re.subn(r"<!--SCENA-->.*?<!--/SCENA-->", lambda _: block, html, flags=re.S)
 assert n == 1, "V index.html chybí značky <!--SCENA--> a <!--/SCENA-->"
 html_path.write_text(html)

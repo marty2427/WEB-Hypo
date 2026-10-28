@@ -24,7 +24,7 @@ O webu:
   složka assets). Nic se nesestavuje, není potřeba žádný build.
 
 Na začátku se mě zeptej (jednou zprávou) na:
-1. Název webu (zatím je tam pracovní „HypoPlán“).
+1. Název webu (teď „HypoRadar“).
 2. Moje jméno, jak se má zobrazovat na webu.
 3. Telefon, který má být na webu.
 4. E-mail, na který mají chodit poptávky z formuláře.
